@@ -3,7 +3,7 @@ import { FaArrowRight, FaMapMarkerAlt,FaBan,FaCheckCircle } from "react-icons/fa
 import { useObtenerTodosLosTurnos } from "../../../customHooks/useObtenerTodosLosTurnos";
 import { format } from "date-fns";
 
-export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad }) => {
+export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad, turnosDisponibles }) => {
   const { turnos } = useObtenerTodosLosTurnos();
 
   function formatearFecha(fechaISO) {
@@ -21,18 +21,7 @@ export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad 
     return `${dia}-${mes}-${anio}`;
   }
 
-  const turnosLibres = (id) =>
-    turnos.reduce(
-      (total, turno) =>
-        turno.estado === "disponible" &&
-        turno.cancha_id === id &&
-        formatearFecha(turno.fecha) === getFechaHoy()
-          ? total + 1
-          : total,
-      0
-    );
-
-
+  
 
   return (
    <div
@@ -43,7 +32,7 @@ export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad 
     to={`/${seccion}`}
     state={{ idCancha: id }}
     className={`flex items-center gap-4 sm:gap-6 p-4 sm:p-5 pr-5 group ${
-      turnosLibres(id) === 0 ? "opacity-70" : ""
+      turnosDisponibles === 0 ? "opacity-70" : ""
     } border-l-4 border-transparent hover:border-emerald-400 transition-all duration-300`}
     aria-label={`Reservar en cancha ${nombre}`}
     role="button"
@@ -79,16 +68,16 @@ export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad 
       {/* Estado de disponibilidad */}
       <div
         className={`mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
-          turnosLibres(id) > 0
+          turnosDisponibles > 0
             ? "bg-emerald-100 text-emerald-800"
             : "bg-red-100 text-red-800"
         }`}
       >
-        {turnosLibres(id) > 0 ? (
+        {turnosDisponibles > 0 ? (
           <>
             <FaCheckCircle className="mr-1.5 text-emerald-600" />
-            {turnosLibres(id)}{" "}
-            {turnosLibres(id) !== 1 ? "turnos disponibles" : "turno disponible"}
+            {turnosDisponibles}{" "}
+            {turnosDisponibles !== 1 ? "turnos disponibles" : "turno disponible"}
           </>
         ) : (
           <>

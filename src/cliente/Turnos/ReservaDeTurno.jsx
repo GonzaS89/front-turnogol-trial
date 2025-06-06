@@ -8,9 +8,9 @@ import { Turno } from "./components/Turno";
 export default function ReservaDeTurno() {
   const location = useLocation();
   const { seccioncancha: seccion } = useParams();
-  // const { idCancha: canchaId } = location.state || {};
+  const { idCancha: canchaId } = location.state || {};
   const { datos: canchas, isLoading: loadingCancha } = useCanchas();
-  const cancha = canchas.find((item) => item.seccion === seccion);
+  const cancha = canchas.find((item) => item.seccion === seccion || item.id === canchaId);
   const { turnos, isLoading, error } = useObtenerTurnosxCancha(cancha?.id);
 
   const fechaHoy = new Date().toLocaleDateString("sv-SE"); // "YYYY-MM-DD"
@@ -100,7 +100,7 @@ export default function ReservaDeTurno() {
                 <p className="text-xs sm:text-sm xl:text-lg text-emerald-200 mt-1 flex items-center gap-2">
                   <span className="text-emerald-300">💰</span>
                   Precios por turno: $ {Math.trunc(cancha?.tarifa1)} - ${" "}
-                  {Math.trunc(cancha.tarifa2)}
+                  {Math.trunc(cancha?.tarifa2)}
                 </p>
               </div>
             </div>
