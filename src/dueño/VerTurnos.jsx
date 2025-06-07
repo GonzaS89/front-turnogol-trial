@@ -120,9 +120,11 @@ export default function VerTurnos() {
 
   // Función para registrar pago
   const confirmarPago = async (turnoId, tipoPago) => {
+
+    console.log("Confirmando pago:", turnoId, tipoPago);
     try {
       await axios.put(`https://turnogol.site/api-pruebas/turnos/pagar/${turnoId}`, {
-        tipo_pago: tipoPago,
+        tipoPago,
       });
 
       // setTurnos((prev) =>
