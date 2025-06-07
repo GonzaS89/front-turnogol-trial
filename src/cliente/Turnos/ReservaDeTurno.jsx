@@ -11,7 +11,9 @@ export default function ReservaDeTurno() {
   const { idCancha: canchaId } = location.state || {};
   const { datos: canchas, isLoading: loadingCancha } = useCanchas();
   const cancha = canchas.find((item) => item.seccion === seccion || item.id === canchaId);
-  const { turnos, isLoading, error } = useObtenerTurnosxCancha(cancha?.id);
+  const { turnos, isLoading, error } = useObtenerTurnosxCancha(canchaId);
+
+  console.log("Datos de la cancha:", canchaId);
 
   const fechaHoy = new Date().toLocaleDateString("sv-SE"); // "YYYY-MM-DD"
 

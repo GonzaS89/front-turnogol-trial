@@ -12,24 +12,20 @@ import {
   FaPhone,
   FaClock,
   FaRegThumbsUp,
+  FaMoneyBillWave,
 } from "react-icons/fa";
 
 export default function VerTurnos() {
   const navigate = useNavigate();
   const location = useLocation();
   const cancha = location.state?.cancha;
-
   const [turnos, setTurnos] = useState([]);
   const [turnosAgrupados, setTurnosAgrupados] = useState({});
   const [fechaVisible, setFechaVisible] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const isReservado = (estado) =>
-    estado === "reservado" || estado === "pendiente";
-
-  const [modalDelete, setModalDelete] = useState(false)
-   
+  const [modalPagado, setModalPagado] = useState(null); // null = no mostrar modal
+  const isReservado = (estado) => ["reservado", "pendiente"].includes(estado);
 
   // Cargar turnos desde API
   useEffect(() => {
@@ -50,7 +46,6 @@ export default function VerTurnos() {
         setIsLoading(false);
       }
     };
-
     if (cancha?.id) fetchTurnos();
   }, [cancha]);
 
@@ -62,7 +57,6 @@ export default function VerTurnos() {
       acc[fecha].push({ ...turno, hora: turno.hora.slice(0, 5) });
       return acc;
     }, {});
-
     Object.keys(agrupados).forEach((fecha) => {
       agrupados[fecha] = agrupados[fecha].sort((a, b) => {
         const horaA = a.hora === "00:00" ? "24:00" : a.hora;
@@ -70,7 +64,6 @@ export default function VerTurnos() {
         return horaA.localeCompare(horaB);
       });
     });
-
     setTurnosAgrupados(agrupados);
   }, [turnos]);
 
@@ -100,9 +93,7 @@ export default function VerTurnos() {
     try {
       await axios.put(`https://turnogol.site/api-pruebas/turnos/confirmar/${turnoId}`);
       setTurnos((prevTurnos) =>
-        prevTurnos.map((t) =>
-          t.id === turnoId ? { ...t, estado: "reservado" } : t
-        )
+        prevTurnos.map((t) => (t.id === turnoId ? { ...t, estado: "reservado" } : t))
       );
     } catch (error) {
       alert("Error al confirmar el turno");
@@ -112,7 +103,6 @@ export default function VerTurnos() {
   const eliminarTurno = async (turnoId) => {
     const confirmar = window.confirm("¿Estás seguro de eliminar este turno?");
     if (!confirmar) return;
-
     try {
       await axios.delete(`https://turnogol.site/api-pruebas/turnos_canchas/${turnoId}`);
       setTurnos((prevTurnos) => prevTurnos.filter((t) => t.id !== turnoId));
@@ -126,6 +116,28 @@ export default function VerTurnos() {
     const fecha = new Date(year, month - 1, day); // Mes es 0-based
     const options = { weekday: "long", day: "numeric", month: "long" };
     return fecha.toLocaleDateString("es-ES", options);
+  };
+
+  // Función para registrar pago
+  const confirmarPago = async (turnoId, tipoPago) => {
+    try {
+      await axios.put(`https://turnogol.site/api-pruebas/turnos/pagar/${turnoId}`, {
+        tipo_pago: tipoPago,
+      });
+
+      // setTurnos((prev) =>
+      //   prev.map((t) =>
+      //     t.id === turnoId ? { ...t, tipo_pago: tipoPago } : t
+      //   )
+      // );
+
+      alert("✅ Pago registrado correctamente");
+    } catch (error) {
+      console.error("Error al registrar el pago:", error);
+      alert("❌ Error al registrar el pago");
+    } finally {
+      setModalPagado(null);
+    }
   };
 
   return (
@@ -203,8 +215,7 @@ export default function VerTurnos() {
                             ? "bg-gray-50 border-l-4 border-gray-200"
                             : turno.estado === "pendiente"
                             ? "bg-yellow-50 hover:bg-yellow-100 border-l-4 border-yellow-400"
-                            : "bg-emerald-50 hover:bg-emerald-100 border-l-4 border-emerald-400" 
-                            
+                            : "bg-emerald-50 hover:bg-emerald-100 border-l-4 border-emerald-400"
                         }`}
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -255,13 +266,24 @@ export default function VerTurnos() {
                           {/* Acciones */}
                           <div className="flex flex-col sm:flex-row gap-2 justify-end">
                             {turno.estado === "reservado" && (
-                              <button
-                                onClick={() => ponerDisponible(turno.id)}
-                                className="flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-all active:scale-95"
-                              >
-                                <FaTimes />
-                                <span>Liberar</span>
-                              </button>
+                              <>
+                                <button
+                                  onClick={() => ponerDisponible(turno.id)}
+                                  className="flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-all active:scale-95"
+                                >
+                                  <FaTimes />
+                                  <span>Liberar</span>
+                                </button>
+
+                                {/* Botón Pagado */}
+                                <button
+                                  onClick={() => setModalPagado(turno.id)}
+                                  className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-all active:scale-95"
+                                >
+                                  <FaMoneyBillWave />
+                                  <span>Pagado</span>
+                                </button>
+                              </>
                             )}
 
                             {turno.estado === "pendiente" && (
@@ -304,6 +326,35 @@ export default function VerTurnos() {
           </div>
         )}
       </div>
+
+      {/* Modal para elegir forma de pago */}
+      {modalPagado && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-xs w-full text-center">
+            <h3 className="text-lg font-bold mb-4">¿Cómo se realizó el pago?</h3>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => confirmarPago(modalPagado, "efectivo")}
+                className="px-4 py-2 bg-green-100 text-green-800 rounded hover:bg-green-200"
+              >
+                Efectivo
+              </button>
+              <button
+                onClick={() => confirmarPago(modalPagado, "transferencia")}
+                className="px-4 py-2 bg-blue-100 text-blue-800 rounded hover:bg-blue-200"
+              >
+                Transferencia
+              </button>
+              <button
+                onClick={() => setModalPagado(null)}
+                className="mt-2 text-sm text-gray-500 hover:text-gray-700"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
