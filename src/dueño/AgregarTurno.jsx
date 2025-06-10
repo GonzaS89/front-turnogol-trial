@@ -106,7 +106,6 @@ export default function AgregarTurno() {
           })
         )
       );
-      console.log(fechaSeleccionada);
       setShowModal(true);
       setConfIngresos(false);
       setHorarios([""]);
