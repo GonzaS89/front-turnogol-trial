@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
 import { GiConfirmed } from "react-icons/gi";
+import { User, CreditCard, Phone } from 'lucide-react'; 
 import { AnimatePresence } from "framer-motion";
 
 export default function ConfirmarTurno() {
@@ -179,74 +180,103 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
           className="w-full lg:w-[1000px] flex flex-col lg:flex-row justify-center items-center gap-4 max-[]:xl:max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-8xl"
         >
           {/* Tarjeta de información */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 mb-6 md:mb-0 border border-emerald-100 md:w-1/2 mx-auto transform transition-all hover:shadow-2xl duration-300">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-emerald-900 mb-6 uppercase tracking-wider">
-              Ingresá tus datos
-            </h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 mb-6 md:mb-0
+                    border border-emerald-100 md:w-1/2 lg:w-2/3 xl:w-1/2
+                    mx-auto transform transition-all duration-300
+                    hover:scale-[1.01] hover:shadow-emerald-300/40 focus-within:shadow-emerald-300/50">
+      {/* Form Title */}
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center
+                     text-emerald-800 mb-8 uppercase tracking-wider
+                     bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent">
+        Ingresá tus datos
+      </h2>
 
-            <div className="space-y-5 mb-7">
-              {/* Campo Nombre */}
-              <div className="flex items-center gap-4 bg-gray-50 px-4 py-3 rounded-xl focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white transition-all duration-200 group">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center shadow-md transform transition-transform group-hover:scale-105">
-                  <FaUser className="text-white text-lg sm:text-xl" />
-                </div>
-                <input
-                  type="text"
-                  name="nombre"
-                  placeholder="Nombre completo"
-                  value={formData.nombre}
-                  onChange={handleChange}
-                  required
-                  className="flex-1 bg-transparent border-none outline-none text-base sm:text-lg text-gray-800 placeholder-gray-400"
-                />
-              </div>
-
-              {/* Campo DNI */}
-              <div className="flex items-center gap-4 bg-gray-50 px-4 py-3 rounded-xl focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white transition-all duration-200 group">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center shadow-md transform transition-transform group-hover:scale-105">
-                  <FaIdCard className="text-white text-lg sm:text-xl" />
-                </div>
-                <input
-                  type="number"
-                  name="dni"
-                  placeholder="DNI"
-                  value={formData.dni}
-                  onChange={handleChange}
-                  required
-                  className="flex-1 bg-transparent border-none outline-none text-base sm:text-lg text-gray-800 placeholder-gray-400"
-                />
-              </div>
-              {errorDni && <p className="text-red-500 text-sm">{errorDni}</p>}
-
-              {/* Campo Teléfono */}
-              {/* <div className="flex items-center gap-4 bg-gray-50 px-4 py-3 rounded-xl focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white transition-all duration-200 group">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center shadow-md transform transition-transform group-hover:scale-105">
-                  <FaPhone className="text-white text-lg sm:text-xl" />
-                </div>
-                <input
-                  type="tel"
-                  name="telefono"
-                  placeholder="Teléfono"
-                  value={formData.telefono}
-                  onChange={handleChange}
-                  required
-                  className="flex-1 bg-transparent border-none outline-none text-base sm:text-lg text-gray-800 placeholder-gray-400"
-                />
-              </div> */}
-              {errorTelefono && <p className="text-red-500 text-sm">{errorTelefono}</p>}
-            </div>
-
-            {/* Botón Submit */}
-            <button
-              disabled={!formData.nombre || formData.dni.length !== 8}
-              onClick={() => setShowModal(true)}
-              className={`w-full py-4 rounded-xl font-bold text-white text-lg sm:text-xl transition-all duration-300 transform active:scale-95 shadow-lg ${formData.nombre && formData.dni && formData.dni.length === 8 ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-600 hover:to-green-700"
-                : "bg-gray-300 cursor-not-allowed"
-                }`}
-            >
-              Continuar
-            </button>
+      {/* Input Fields Section */}
+      <div className="space-y-6 sm:space-y-7 mb-8">
+        {/* Campo Nombre */}
+        <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
+                        focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
+                        transition-all duration-300 group shadow-sm hover:shadow-md">
+          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
+                          flex items-center justify-center shadow-md transform transition-transform
+                          group-hover:scale-105 group-focus-within:scale-105">
+            <User className="text-white text-xl sm:text-2xl" /> {/* Lucide User Icon */}
           </div>
+          <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre completo"
+            value={formData.nombre}
+            onChange={handleChange}
+            required
+            className="flex-1 bg-transparent border-none outline-none
+                       text-base sm:text-lg text-gray-800 placeholder-gray-400
+                       font-medium"
+          />
+        </div>
+
+        {/* Campo DNI */}
+        <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
+                        focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
+                        transition-all duration-300 group shadow-sm hover:shadow-md">
+          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
+                          flex items-center justify-center shadow-md transform transition-transform
+                          group-hover:scale-105 group-focus-within:scale-105">
+            <CreditCard className="text-white text-xl sm:text-2xl" /> {/* Lucide CreditCard Icon */}
+          </div>
+          <input
+            type="number"
+            name="dni"
+            placeholder="DNI"
+            value={formData.dni}
+            onChange={handleChange}
+            required
+            className="flex-1 bg-transparent border-none outline-none
+                       text-base sm:text-lg text-gray-800 placeholder-gray-400
+                       font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" // Tailwind class for number input styling
+          />
+        </div>
+        {/* DNI Error Message */}
+        {errorDni && <p className="text-red-600 text-sm mt-1 px-2">{errorDni}</p>}
+
+        {/* Campo Teléfono (Uncomment to enable) */}
+        {/* <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
+                        focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
+                        transition-all duration-300 group shadow-sm hover:shadow-md">
+          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
+                          flex items-center justify-center shadow-md transform transition-transform
+                          group-hover:scale-105 group-focus-within:scale-105">
+            <Phone className="text-white text-xl sm:text-2xl" />
+          </div>
+          <input
+            type="tel"
+            name="telefono"
+            placeholder="Teléfono"
+            value={formData.telefono}
+            onChange={handleChange}
+            required
+            className="flex-1 bg-transparent border-none outline-none
+                       text-base sm:text-lg text-gray-800 placeholder-gray-400
+                       font-medium"
+          />
+        </div> */}
+        {/* {errorTelefono && <p className="text-red-600 text-sm mt-1 px-2">{errorTelefono}</p>} */}
+      </div>
+
+      {/* Submit Button */}
+      <button
+        disabled={!formData.nombre || formData.dni.length !== 8} // Original validation logic
+        onClick={() => handleShowModal(true)} // Using the mock modal handler
+        className={`w-full py-4 rounded-xl font-extrabold text-white text-lg sm:text-xl
+                    transition-all duration-300 transform active:scale-98 shadow-xl
+                    ${formData.nombre && formData.dni && formData.dni.length === 8
+                        ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-600 hover:to-green-700 hover:shadow-emerald-500/50"
+                        : "bg-gray-300 text-gray-600 cursor-not-allowed shadow-none"
+                    }`}
+      >
+        Continuar
+      </button>
+    </div>
         </div>
       )}
       {/* Modal de Confirmación */}
