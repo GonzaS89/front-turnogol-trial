@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
 import { GiConfirmed } from "react-icons/gi";
-import { User, CreditCard, Phone } from 'lucide-react'; 
+import { User, CreditCard, Phone } from 'lucide-react';
 import { AnimatePresence } from "framer-motion";
 
 export default function ConfirmarTurno() {
@@ -184,63 +184,63 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
                     border border-emerald-100 md:w-1/2 lg:w-2/3 xl:w-1/2
                     mx-auto transform transition-all duration-300
                     hover:scale-[1.01] hover:shadow-emerald-300/40 focus-within:shadow-emerald-300/50">
-      {/* Form Title */}
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center
+            {/* Form Title */}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center
                      text-emerald-800 mb-8 uppercase tracking-wider
                      bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent">
-        Ingresá tus datos
-      </h2>
+              Ingresá tus datos
+            </h2>
 
-      {/* Input Fields Section */}
-      <div className="space-y-6 sm:space-y-7 mb-8">
-        {/* Campo Nombre */}
-        <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
+            {/* Input Fields Section */}
+            <div className="space-y-6 sm:space-y-7 mb-8">
+              {/* Campo Nombre */}
+              <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
                         focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
                         transition-all duration-300 group shadow-sm hover:shadow-md">
-          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
                           flex items-center justify-center shadow-md transform transition-transform
                           group-hover:scale-105 group-focus-within:scale-105">
-            <User className="text-white text-xl sm:text-2xl" /> {/* Lucide User Icon */}
-          </div>
-          <input
-            type="text"
-            name="nombre"
-            placeholder="Nombre completo"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-            className="flex-1 bg-transparent border-none outline-none
+                  <User className="text-white text-xl sm:text-2xl" /> {/* Lucide User Icon */}
+                </div>
+                <input
+                  type="text"
+                  name="nombre"
+                  placeholder="Nombre completo"
+                  value={formData.nombre}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 bg-transparent border-none outline-none
                        text-base sm:text-lg text-gray-800 placeholder-gray-400
                        font-medium"
-          />
-        </div>
+                />
+              </div>
 
-        {/* Campo DNI */}
-        <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
+              {/* Campo DNI */}
+              <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
                         focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
                         transition-all duration-300 group shadow-sm hover:shadow-md">
-          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
                           flex items-center justify-center shadow-md transform transition-transform
                           group-hover:scale-105 group-focus-within:scale-105">
-            <CreditCard className="text-white text-xl sm:text-2xl" /> {/* Lucide CreditCard Icon */}
-          </div>
-          <input
-            type="number"
-            name="dni"
-            placeholder="DNI"
-            value={formData.dni}
-            onChange={handleChange}
-            required
-            className="flex-1 bg-transparent border-none outline-none
+                  <CreditCard className="text-white text-xl sm:text-2xl" /> {/* Lucide CreditCard Icon */}
+                </div>
+                <input
+                  type="number"
+                  name="dni"
+                  placeholder="DNI"
+                  value={formData.dni}
+                  onChange={handleChange}
+                  required
+                  className="flex-1 bg-transparent border-none outline-none
                        text-base sm:text-lg text-gray-800 placeholder-gray-400
                        font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" // Tailwind class for number input styling
-          />
-        </div>
-        {/* DNI Error Message */}
-        {errorDni && <p className="text-red-600 text-sm mt-1 px-2">{errorDni}</p>}
+                />
+              </div>
+              {/* DNI Error Message */}
+              {errorDni && <p className="text-red-600 text-sm mt-1 px-2">{errorDni}</p>}
 
-        {/* Campo Teléfono (Uncomment to enable) */}
-        {/* <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
+              {/* Campo Teléfono (Uncomment to enable) */}
+              {/* <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
                         focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
                         transition-all duration-300 group shadow-sm hover:shadow-md">
           <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
@@ -260,23 +260,23 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
                        font-medium"
           />
         </div> */}
-        {/* {errorTelefono && <p className="text-red-600 text-sm mt-1 px-2">{errorTelefono}</p>} */}
-      </div>
+              {/* {errorTelefono && <p className="text-red-600 text-sm mt-1 px-2">{errorTelefono}</p>} */}
+            </div>
 
-      {/* Submit Button */}
-      <button
-        disabled={!formData.nombre || formData.dni.length !== 8} // Original validation logic
-        onClick={() => handleShowModal(true)} // Using the mock modal handler
-        className={`w-full py-4 rounded-xl font-extrabold text-white text-lg sm:text-xl
+            {/* Submit Button */}
+            <button
+              disabled={!formData.nombre || formData.dni.length !== 8} // Original validation logic
+              onClick={() => setShowModal(true)} // Using the mock modal handler
+              className={`w-full py-4 rounded-xl font-extrabold text-white text-lg sm:text-xl
                     transition-all duration-300 transform active:scale-98 shadow-xl
                     ${formData.nombre && formData.dni && formData.dni.length === 8
-                        ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-600 hover:to-green-700 hover:shadow-emerald-500/50"
-                        : "bg-gray-300 text-gray-600 cursor-not-allowed shadow-none"
-                    }`}
-      >
-        Continuar
-      </button>
-    </div>
+                  ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-600 hover:to-green-700 hover:shadow-emerald-500/50"
+                  : "bg-gray-300 text-gray-600 cursor-not-allowed shadow-none"
+                }`}
+            >
+              Continuar
+            </button>
+          </div>
         </div>
       )}
       {/* Modal de Confirmación */}
@@ -304,79 +304,79 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
 
               {/* Contenido scrollable */}
               <div className="overflow-y-auto px-4 sm:px-5 py-4 flex-1">
-  {/* Datos del cliente */}
-  <div className="space-y-3 mb-4">
-    {[
-      { label: "Nombre", value: formData.nombre, icon: <FaUser /> },
-      { label: "DNI", value: formData.dni, icon: <FaIdCard /> },
-      // {
-      //   label: "Teléfono",
-      //   value: formData.telefono,
-      //   icon: <FaPhone />,
-      // },
-      {
-        label: "Precio",
-        value: `$${Math.trunc(turno.precio)}`,
-        icon: <FaMoneyBill1Wave />,
-      },
-      {
-        label: "Seña",
-        value: `$${Math.trunc(cancha.adelanto)}`,
-        icon: <FaMoneyBillWave />,
-      },
-    ].map((item, index) => (
-      <div key={index} className="flex items-center gap-2 sm:gap-3">
-        <div className="w-8 h-8 sm:w-9 sm:h-9 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700">
-          {item.icon}
-        </div>
-        <span className="font-medium text-gray-800 text-sm sm:text-base">
-          {item.label}:
-        </span>
-        <span className="text-gray-600 text-sm sm:text-base truncate">
-          {item.value || "No disponible"}
-        </span>
-      </div>
-    ))}
-  </div>
+                {/* Datos del cliente */}
+                <div className="space-y-3 mb-4">
+                  {[
+                    { label: "Nombre", value: formData.nombre, icon: <FaUser /> },
+                    { label: "DNI", value: formData.dni, icon: <FaIdCard /> },
+                    // {
+                    //   label: "Teléfono",
+                    //   value: formData.telefono,
+                    //   icon: <FaPhone />,
+                    // },
+                    {
+                      label: "Precio",
+                      value: `$${Math.trunc(turno.precio)}`,
+                      icon: <FaMoneyBill1Wave />,
+                    },
+                    {
+                      label: "Seña",
+                      value: `$${Math.trunc(cancha.adelanto)}`,
+                      icon: <FaMoneyBillWave />,
+                    },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-2 sm:gap-3">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700">
+                        {item.icon}
+                      </div>
+                      <span className="font-medium text-gray-800 text-sm sm:text-base">
+                        {item.label}:
+                      </span>
+                      <span className="text-gray-600 text-sm sm:text-base truncate">
+                        {item.value || "No disponible"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
 
-  {/* Detalles del turno */}
-  <div className="bg-emerald-50 px-4 py-3 mx-2 my-3 rounded-lg border border-emerald-100">
-    <p className="font-semibold text-emerald-800 text-sm sm:text-base mb-1">
-      Detalles del turno:
-    </p>
-    <p className="text-xs sm:text-sm text-gray-700">
-      <span className="capitalize">{cancha?.nombre}</span> -{" "}
-      {formatearFecha(turno?.fecha)} a las {formatearHora(turno?.hora)} hs
-    </p>
-  </div>
+                {/* Detalles del turno */}
+                <div className="bg-emerald-50 px-4 py-3 mx-2 my-3 rounded-lg border border-emerald-100">
+                  <p className="font-semibold text-emerald-800 text-sm sm:text-base mb-1">
+                    Detalles del turno:
+                  </p>
+                  <p className="text-xs sm:text-sm text-gray-700">
+                    <span className="capitalize">{cancha?.nombre}</span> -{" "}
+                    {formatearFecha(turno?.fecha)} a las {formatearHora(turno?.hora)} hs
+                  </p>
+                </div>
 
-  {/* Método de pago */}
-  <div className="mb-4">
-    <label className="block text-gray-700 font-medium mb-2 text-sm">
-      Método de pago de seña:
-    </label>
-    <select
-      name="metodoPago"
-      value={formData.metodoPago}
-      onChange={handleChange}
-      className="w-full p-2 sm:p-3 border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:outline-none shadow-sm transition text-sm"
-    >
-      <option value="efectivo">Efectivo</option>
-      <option value="transferencia">Transferencia</option>
-    </select>
-  </div>
+                {/* Método de pago */}
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2 text-sm">
+                    Método de pago de seña:
+                  </label>
+                  <select
+                    name="metodoPago"
+                    value={formData.metodoPago}
+                    onChange={handleChange}
+                    className="w-full p-2 sm:p-3 border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:outline-none shadow-sm transition text-sm"
+                  >
+                    <option value="efectivo">Efectivo</option>
+                    <option value="transferencia">Transferencia</option>
+                  </select>
+                </div>
 
-  {/* AVISO IMPORTANTE */}
-  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-md shadow-inner mb-4">
-    <p className="text-yellow-800 text-xs sm:text-sm font-medium">
-      <span className="inline-block mr-1 align-middle">
-        ⚠️
-      </span>
-      <strong className="font-bold">AVISO:</strong> Tienes{" "}
-      <span className="font-semibold text-red-600">30 minutos</span> para enviarle el comprobante de la seña o, si es en efectivo, coordinar el pago. De lo contrario, la solicitud se cancelará automáticamente.
-    </p>
-  </div>
-</div>
+                {/* AVISO IMPORTANTE */}
+                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-md shadow-inner mb-4">
+                  <p className="text-yellow-800 text-xs sm:text-sm font-medium">
+                    <span className="inline-block mr-1 align-middle">
+                      ⚠️
+                    </span>
+                    <strong className="font-bold">AVISO:</strong> Tienes{" "}
+                    <span className="font-semibold text-red-600">30 minutos</span> para enviarle el comprobante de la seña o, si es en efectivo, coordinar el pago. De lo contrario, la solicitud se cancelará automáticamente.
+                  </p>
+                </div>
+              </div>
 
               {/* Botones */}
               <div className="flex flex-col sm:flex-row gap-2 px-4 sm:px-5 pb-5 pt-2 border-t border-gray-200 bg-gray-50">
@@ -457,7 +457,7 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
 
               {/* Mensaje principal */}
               <p className="text-gray-600 px-6 mb-6 text-center">
-            
+
                 Te derivamos con el propietario de la cancha.
               </p>
             </div>
