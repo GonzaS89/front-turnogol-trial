@@ -236,7 +236,7 @@ export default function VerTurnos() {
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {Object.entries(turnosAgrupados).map(([fecha, turnosPorFecha]) => (
               <div
                 key={fecha}

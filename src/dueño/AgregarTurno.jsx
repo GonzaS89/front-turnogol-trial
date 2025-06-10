@@ -17,6 +17,7 @@ export default function AgregarTurno() {
   const cancha = location.state?.cancha;
 
   const [horarios, setHorarios] = useState([""]);
+ 
   const [showModal, setShowModal] = useState(false);
   const [confIngresos, setConfIngresos] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +26,24 @@ export default function AgregarTurno() {
     const today = new Date();
     return today.toISOString().split("T")[0]; // Formato YYYY-MM-DD
   });
+  const [fechaAnterior, setFechaAnterior] = useState(fechaSeleccionada);
+
+  let fechaFiltrada;
+
+  if (fechaSeleccionada) {
+    const [year, month, day] = fechaSeleccionada.split("-");
+    fechaFiltrada = new Date(year, month - 1, day); // Mes comienza en 0
+  } else {
+    fechaFiltrada = new Date(); // Fecha actual
+  }
+
+  useEffect(() => {
+    // Si la fecha seleccionada cambia...
+    if (fechaSeleccionada !== fechaAnterior) {
+      setHorarios([""]); // Reseteamos los horarios
+      setFechaAnterior(fechaSeleccionada); // Actualizamos la fecha anterior
+    }
+  }, [fechaSeleccionada, fechaAnterior]);
 
   // Obtener horarios existentes
   useEffect(() => {
@@ -46,14 +65,7 @@ export default function AgregarTurno() {
   }, [cancha]);
 
   // Filtrar horarios por fecha seleccionada
-  let fechaFiltrada;
-
-  if (fechaSeleccionada) {
-    const [year, month, day] = fechaSeleccionada.split("-");
-    fechaFiltrada = new Date(year, month - 1, day); // Mes comienza en 0
-  } else {
-    fechaFiltrada = new Date(); // Fecha actual
-  }
+  
 
   // Aseguramos que la hora sea medianoche en hora local
   fechaFiltrada.setHours(0, 0, 0, 0);
@@ -238,11 +250,10 @@ export default function AgregarTurno() {
               type="button"
               onClick={() => setConfIngresos(true)}
               disabled={horarios.some((h) => !h) || !fechaSeleccionada}
-              className={`w-full py-3 px-4 rounded-lg font-semibold shadow-md transition-all duration-200 transform active:scale-95 ${
-                horarios.some((h) => !h) || !fechaSeleccionada
+              className={`w-full py-3 px-4 rounded-lg font-semibold shadow-md transition-all duration-200 transform active:scale-95 ${horarios.some((h) => !h) || !fechaSeleccionada
                   ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                   : "bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-400 hover:to-green-400 text-white shadow-emerald-300/50 hover:shadow-lg"
-              }`}
+                }`}
             >
               Guardar Turnos
             </button>

@@ -10,6 +10,7 @@ import {
   FaMoneyBillWave,
 } from "react-icons/fa";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
+import { GiConfirmed } from "react-icons/gi";
 import { AnimatePresence } from "framer-motion";
 
 export default function ConfirmarTurno() {
@@ -415,7 +416,7 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
               {/* Icono de éxito */}
               <div className="flex justify-center mt-6">
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-                  <FaWhatsapp className="text-green-500 text-4xl" />
+                  <GiConfirmed className="text-green-500 text-4xl" />
                 </div>
               </div>
 
@@ -426,57 +427,9 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
 
               {/* Mensaje principal */}
               <p className="text-gray-600 px-6 mb-6 text-center">
-                {formData.metodoPago === "transferencia"
-                  ? "Contactá con el propietario de la cancha para enviarle el comprobante por la seña."
-                  : "Tu solicitud ha sido enviada exitosamente. El propietario de la cancha espera que abones para confirmar el turno."}
+            
+                Te derivamos con el propietario de la cancha.
               </p>
-
-              {/* Datos bancarios si aplica */}
-              {/* {formData.metodoPago === "transferencia" && (
-          <div className="px-6 mb-6">
-            <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-blue-800 text-sm">Datos bancarios:</h4>
-
-              <button
-                onClick={() => copiarAlPortapapeles(cancha.alias, "alias")}
-                className="flex items-center justify-between w-full text-left text-sm text-gray-700 hover:text-emerald-600 transition"
-                type="button"
-              >
-                <span><strong>Alias:</strong> {cancha.alias || "No disponible"}</span>
-                <div className="flex items-center gap-1">
-                  <IoCopyOutline className="text-gray-400 hover:text-emerald-600" />
-                  {infoCopiadaAlias && <span className="text-green-500 text-xs ml-1">Copiado</span>}
-                </div>
-              </button>
-
-              <button
-                onClick={() => copiarAlPortapapeles(cancha.cvu, "cvu")}
-                className="flex items-center justify-between w-full text-left text-sm text-gray-700 hover:text-emerald-600 transition"
-                type="button"
-              >
-                <span><strong>CVU / CBU:</strong> {cancha.cvu || "No disponible"}</span>
-                <div className="flex items-center gap-1">
-                  <IoCopyOutline className="text-gray-400 hover:text-emerald-600" />
-                  {infoCopiadaCVU && <span className="text-green-500 text-xs ml-1">Copiado</span>}
-                </div>
-              </button>
-
-              <p className="text-sm text-gray-700"><strong>A nombre de:</strong> {cancha.wallet_nombre}</p>
-              <p className="text-sm text-gray-700"><strong>Banco:</strong> {cancha.wallet_banco}</p>
-            </div>
-          </div>
-        )} */}
-
-              {/* Botón de WhatsApp */}
-              {/* <a
-          href={whatsappLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mx-6 mb-6 flex items-center justify-center gap-2 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-200 active:scale-95 shadow-md"
-          onClick={closeModal}
-        >
-          <FaWhatsapp /> Notificar al propietario
-        </a> */}
             </div>
           </div>
         )}
