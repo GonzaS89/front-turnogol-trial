@@ -205,36 +205,52 @@ export default function ReservaDeTurno() {
                 const mesAbreviado = date.toLocaleDateString("es-ES", { month: "short" }); // Ej: "abr"
 
                 return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => setFechaSeleccionada(fecha)}
-                    className={`min-w-[100px] px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 text-center
-          ${fechaSeleccionada === fecha
-                        ? "bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-md scale-105"
-                        : "bg-white hover:bg-emerald-50 border border-emerald-100"
+                  <div
+                  key={index}
+                  // Removed Framer Motion properties (initial, animate, transition, whileTap, exit)
+                  onClick={(e) => { // Existing onClick logic remains
+                    setFechaSeleccionada(fecha);
+                    const targetElement = e.currentTarget;
+                    const carouselContainer = document.getElementById("carrusel-fechas");
+                
+                    if (carouselContainer && targetElement) {
+                      const containerRect = carouselContainer.getBoundingClientRect();
+                      const elementRect = targetElement.getBoundingClientRect();
+                
+                      const isOutOfViewLeft = elementRect.left < containerRect.left;
+                      const isOutOfViewRight = elementRect.right > containerRect.right;
+                
+                      if (isOutOfViewLeft || isOutOfViewRight) {
+                        targetElement.scrollIntoView({
+                          behavior: 'smooth',
+                          inline: 'center'
+                        });
                       }
-          ${isToday && fechaSeleccionada !== fecha ? "ring-2 ring-emerald-500" : ""}
-        `}
-                  >
-                    {/* Día de la semana */}
-                    <p className="text-xs font-medium uppercase tracking-wide text-emerald-600">
-                      {isToday ? "Hoy" : diaSemana}
-                    </p>
-
-                    {/* Fecha (DD/MM) - sin cambios al formato original */}
-                    <p className={`font-semibold text-sm md:text-base ${fechaSeleccionada === fecha ? "text-white" : "text-emerald-800"}`}>
-                      {formatearFecha(fecha).split("/")[0]}
-                    </p>
-
-                    {/* Mes abreviado */}
-                    <p className={`text-xs mt-1 ${fechaSeleccionada === fecha ? "text-white/90" : "text-emerald-500"}`}>
-                      {mesAbreviado}
-                    </p>
-                  </motion.div>
+                    }
+                  }}
+                  className={`
+                    min-w-[120px] px-5 py-4 rounded-2xl cursor-pointer transition-all duration-300 transform active:scale-97
+                    text-center flex flex-col justify-center items-center
+                    ${fechaSeleccionada === fecha
+                      ? "bg-gradient-to-br from-emerald-600 to-green-700 text-white shadow-lg shadow-emerald-400/50 scale-105 ring-2 ring-emerald-300" // Enhanced selected state
+                      : "bg-white hover:bg-emerald-50 border border-emerald-100 text-gray-800 hover:shadow-md" // Improved default and hover states
+                    }
+                    ${isToday && fechaSeleccionada !== fecha ? "ring-2 ring-emerald-500 ring-offset-2 ring-offset-gray-50" : ""} {/* "Hoy" indicator */}
+                  `}
+                >
+                  {/* Day of the week */}
+                  <p className={`text-sm font-semibold uppercase tracking-wide ${fechaSeleccionada === fecha ? "text-white" : "text-emerald-600"}`}>
+                    {isToday ? "Hoy" : diaSemana}
+                  </p>
+                  {/* Date (DD/MM) */}
+                  <p className={`font-extrabold text-3xl sm:text-4xl ${fechaSeleccionada === fecha ? "text-white" : "text-gray-900"}`}>
+                    {formatearFecha(fecha).split("/")[0]}
+                  </p>
+                  {/* Abbreviated month */}
+                  <p className={`text-sm mt-1 ${fechaSeleccionada === fecha ? "text-white/90" : "text-emerald-500"}`}>
+                    {mesAbreviado}.
+                  </p>
+                </div>
                 );
               })}
             </div>
