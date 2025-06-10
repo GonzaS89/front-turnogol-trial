@@ -248,7 +248,7 @@ export default function VerTurnos() {
                     {formatFecha(fecha)}
 
                     {getCantidadPendientes(fecha) > 0 && (
-                      <span className="absolute -top-2 -right-3 z-50 inline-flex items-center justify-center w-3 h-3 lg:w-6 h-6 text-xs font-bold text-white bg-red-500 rounded-full border-2 border-white shadow-md animate-bounce">
+                      <span className="absolute -top-2 -right-3 z-50 inline-flex items-center justify-center w-4 h-4 lg:w-6 lg:h-6 text-xs font-bold text-white bg-red-500 rounded-full border-2 border-white shadow-md animate-bounce">
                         {getCantidadPendientes(fecha)}
                       </span>
                     )}
