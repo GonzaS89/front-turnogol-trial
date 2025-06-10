@@ -13,7 +13,9 @@ import {
   FaMoneyBillWave,
   FaExclamationTriangle
 } from "react-icons/fa";
+import { IoChatbubble } from "react-icons/io5";
 import { AiFillLike } from "react-icons/ai";
+import { FaBell } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function VerTurnos() {
@@ -27,7 +29,8 @@ export default function VerTurnos() {
   const [error, setError] = useState(null);
   const [modalPagado, setModalPagado] = useState(null); // null = no mostrar modal
   const [showModal, setShowModal] = useState(false);
-  const [idTurnoSelec, setIdTurnoSelec] = useState(null)
+  const [idTurnoSelec, setIdTurnoSelec] = useState(null);
+  const [mensajeModal, setMensajeModal] = useState(null);
   const isReservado = (estado) => ["reservado", "pendiente"].includes(estado);
 
   // Cargar turnos desde API
@@ -131,18 +134,24 @@ export default function VerTurnos() {
 
   // Función para registrar pago
   const confirmarPago = async (turnoId, tipoPago, condicion) => {
-    console.log("Confirmando pago:", turnoId, tipoPago);
+    console.log("Confirmando pago:", turnoId, tipoPago, condicion);
 
     if (!turnoId || !tipoPago) {
-      alert("Datos incompletos");
+      setMensajeModal({
+        tipo: "error",
+        mensaje: "Datos incompletos. No se puede registrar el pago.",
+      });
       return;
     }
 
     try {
-      await axios.put(`http://localhost:3002/turnos/pagar/${turnoId}`, {
-        tipoPago,
-        condicion,
-      });
+      const response = await axios.put(
+        `https://turnogol.site/api-pruebas/turnos/pagar/${turnoId}`,
+        {
+          tipoPago,
+          condicion,
+        }
+      );
 
       setTurnos((prev) =>
         prev.map((t) =>
@@ -152,22 +161,35 @@ export default function VerTurnos() {
         )
       );
 
-      alert("✅ Pago registrado correctamente");
+      setMensajeModal({
+        tipo: "success",
+        mensaje: "✅ Pago registrado correctamente.",
+      });
     } catch (error) {
       console.error(
         "Error al registrar el pago:",
         error.response?.data || error.message
       );
-      alert("❌ Error al registrar el pago");
+      setMensajeModal({
+        tipo: "error",
+        mensaje:
+          error.response?.data?.message ||
+          "❌ Ocurrió un error al registrar el pago.",
+      });
     } finally {
-      setModalPagado(null);
+      setModalPagado(null); // Cierra el modal actual de pago
     }
   };
 
   const abrirModalConId = (id) => {
-  setShowModal(true);
-  setIdTurnoSelec(id);
-};
+    setShowModal(true);
+    setIdTurnoSelec(id);
+  };
+
+  const getCantidadPendientes = (fechaStr) => {
+    const turnosDeFecha = turnosAgrupados[fechaStr] || [];
+    return turnosDeFecha.filter((turno) => turno.estado === "pendiente").length;
+  };
 
   return (
     <div className="min-h-screen w-full text-gray-800 flex flex-col relative">
@@ -218,12 +240,24 @@ export default function VerTurnos() {
             {Object.entries(turnosAgrupados).map(([fecha, turnosPorFecha]) => (
               <div
                 key={fecha}
-                className="rounded-xl shadow-md overflow-hidden border border-gray-200"
+                className="rounded-xl shadow-md border border-gray-200 relative"
               >
                 {/* Encabezado de fecha */}
                 <div className="flex justify-between items-center px-4 bg-gray-50 border-b border-emerald-200 lg:text-xl py-3 lg:py-4 xl:py-6 uppercase">
-                  <h3 className="font-semibold text-emerald-800">
+                  <h3 className="font-semibold text-emerald-800 flex items-center gap-2 relative">
                     {formatFecha(fecha)}
+
+                    {getCantidadPendientes(fecha) > 0 && (
+                      <span className="absolute -top-2 -right-3 z-50 inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 rounded-full border-2 border-white shadow-md animate-bounce">
+                        {getCantidadPendientes(fecha)}
+                      </span>
+                    )}
+
+                    {getCantidadPendientes(fecha) > 0 && (
+                      <span className="text-yellow-600 animate-bounce">
+                        <FaBell className="text-sm lg:text-base"/>
+                      </span>
+                    )}
                   </h3>
                   <button
                     onClick={() => toggleFechaVisibility(fecha)}
@@ -239,22 +273,21 @@ export default function VerTurnos() {
                     {turnosPorFecha.map((turno) => (
                       <li
                         key={turno.id}
-                        className={`p-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${
-                          turno.condicion === "Pagado"
-                            ? "bg-violet-100 border-l-4 border-violet-500"
-                            : turno.estado === "disponible"
+                        className={`p-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${turno.condicion === "Pagado"
+                          ? "bg-violet-100 border-l-4 border-violet-500"
+                          : turno.estado === "disponible"
                             ? "bg-white border-l-4 border-gray-200 hover:bg-gray-50"
                             : turno.estado === "pendiente"
-                            ? "bg-amber-50 border-l-4 border-amber-400 hover:bg-amber-100"
-                            : "bg-emerald-50 border-l-4 border-emerald-400 hover:bg-emerald-100"
-                        }`}
+                              ? "bg-amber-50 border-l-4 border-amber-400 hover:bg-amber-100"
+                              : "bg-emerald-50 border-l-4 border-emerald-400 hover:bg-emerald-100"
+                          }`}
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           {/* Información del turno */}
                           <div className="flex items-start sm:items-center gap-4">
                             <div className="w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-lg bg-white border border-gray-200 shadow-sm">
-                              <FaClock className={`${turno.condicion ? 'text-purple-800' : 
-                              turno.estado === 'reservado' ? 'text-emerald-600' : turno.estado === 'pendiente' ? 'text-yellow-500' : ''} 
+                              <FaClock className={`${turno.condicion ? 'text-purple-800' :
+                                turno.estado === 'reservado' ? 'text-emerald-600' : turno.estado === 'pendiente' ? 'text-yellow-500' : ''} 
                                 text-2xl"`} />
                             </div>
                             <div>
@@ -268,10 +301,10 @@ export default function VerTurnos() {
                                     {turno.nombre || "Nombre no disponible"}
                                   </p>
                                   <p className="flex items-center gap-2 text-sm text-gray-700">
-                                    <FaIdCard /> 
+                                    <FaIdCard />
                                     {turno.dni || "No disponible"}
                                   </p>
-                                  <span className="inline-flex items-center gap-1">
+                                  <span className="inline-flex text-sm items-center gap-1">
                                     <FaMoneyBillWave />
                                     $ {Math.trunc(turno.precio)}
                                   </span>
@@ -374,40 +407,40 @@ export default function VerTurnos() {
         )}
       </div>
       {showModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-    <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-auto transform transition-all duration-300 animate-fadeIn flex flex-col items-center gap-6 text-center">
-      {/* Icono de advertencia */}
-      <div className="p-3 rounded-full bg-yellow-100 animate-pulse">
-        <FaExclamationTriangle className="text-yellow-500 text-4xl" />
-      </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-auto transform transition-all duration-300 animate-fadeIn flex flex-col items-center gap-6 text-center">
+            {/* Icono de advertencia */}
+            <div className="p-3 rounded-full bg-yellow-100 animate-pulse">
+              <FaExclamationTriangle className="text-yellow-500 text-4xl" />
+            </div>
 
-      {/* Título */}
-      <h3 className="text-xl font-bold text-gray-800">
-        ¿Estás seguro de querer cancelar la solicitud?
-      </h3>
+            {/* Título */}
+            <h3 className="text-xl font-bold text-gray-800">
+              ¿Estás seguro de querer cancelar la solicitud?
+            </h3>
 
-      {/* Botones */}
-      <div className="flex justify-center gap-3 mt-2 w-full">
-        <button
-          onClick={() => setShowModal(false)}
-          className="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors duration-200"
-        >
-          Cancelar
-        </button>
-        <button
-          onClick={() => {
-            ponerDisponible(idTurnoSelec)
-            setShowModal(false);
-          }}
-          className="px-5 py-2 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-lg transition-colors duration-200 flex items-center gap-2"
-        >
-          
-          <span>Aceptar</span>
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+            {/* Botones */}
+            <div className="flex justify-center gap-3 mt-2 w-full">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors duration-200"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  ponerDisponible(idTurnoSelec)
+                  setShowModal(false);
+                }}
+                className="px-5 py-2 bg-red-100 hover:bg-red-200 text-red-700 font-medium rounded-lg transition-colors duration-200 flex items-center gap-2"
+              >
+
+                <span>Aceptar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal para elegir forma de pago */}
       {modalPagado && (
@@ -438,6 +471,25 @@ export default function VerTurnos() {
                 Cancelar
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {mensajeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-xl max-w-xs w-full p-6 animate-fadeIn text-center">
+            <h3
+              className={`text-lg font-bold ${mensajeModal.tipo === "success" ? "text-green-600" : "text-red-600"
+                }`}
+            >
+              {mensajeModal.tipo === "success" ? "✅ Éxito" : "❌ Error"}
+            </h3>
+            <p className="mt-2 text-gray-700">{mensajeModal.mensaje}</p>
+            <button
+              onClick={() => setMensajeModal(null)}
+              className="mt-4 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition"
+            >
+              Cerrar
+            </button>
           </div>
         </div>
       )}

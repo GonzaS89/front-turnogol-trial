@@ -171,9 +171,10 @@ export default function ReservaDeTurno() {
                 document.getElementById("carrusel-fechas").scrollBy({ left: -120, behavior: "smooth" })
               }
               className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 
-                         w-10 h-10 rounded-full flex items-center justify-center
-                         text-emerald-600 bg-white/60 backdrop-blur-sm shadow-lg
-                         hover:bg-white/80 active:bg-white transition-all duration-200"
+               w-10 h-10 rounded-full flex items-center justify-center
+               text-emerald-600 bg-white/90 backdrop-blur-sm shadow-md
+               hover:bg-white active:bg-white transition-all duration-200"
+              style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
               aria-label="Anterior"
             >
               ❮
@@ -196,8 +197,11 @@ export default function ReservaDeTurno() {
                     .split("T")[0];
 
                 // Extraemos el día de la semana y mes
-                const date = new Date(fecha);
-                const diaSemana = date.toLocaleDateString("es-ES", { weekday: "short" }); // Ej: "lun"
+                const dias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+                const date = new Date(fecha + "T00:00:00"); // Asegura que use hora 00:00 local
+                const diaIndex = date.getDay(); // 0 = domingo, ..., 6 = sábado
+                const diaSemana = dias[diaIndex];
                 const mesAbreviado = date.toLocaleDateString("es-ES", { month: "short" }); // Ej: "abr"
 
                 return (

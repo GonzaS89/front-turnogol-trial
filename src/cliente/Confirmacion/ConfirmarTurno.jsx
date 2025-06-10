@@ -4,15 +4,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useCanchas } from "../../customHooks/useCanchas";
 import { useObtenerTurnosxCancha } from "../../customHooks/useObtenerTurnosxCancha";
 import {
-  FaClock,
   FaUser,
   FaIdCard,
-  FaPhone,
   FaWhatsapp,
   FaMoneyBillWave,
 } from "react-icons/fa";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
-import { IoCopyOutline } from "react-icons/io5";
 import { AnimatePresence } from "framer-motion";
 
 export default function ConfirmarTurno() {
@@ -32,9 +29,6 @@ export default function ConfirmarTurno() {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [turnoConfirmado, setTurnoConfirmado] = useState(false);
-  const [whatsappLink, setWhatsappLink] = useState("");
-  const [infoCopiadaAlias, setInfoCopiadaAlias] = useState(false);
-  const [infoCopiadaCVU, setInfoCopiadaCVU] = useState(false);
   const [errorDni, setErrorDni] = useState("");
   const [errorTelefono, setErrorTelefono] = useState("");
   const navigate = useNavigate();
@@ -99,9 +93,6 @@ export default function ConfirmarTurno() {
       metodoPago: "efectivo",
     });
     setTurnoConfirmado(false);
-    setWhatsappLink("");
-    setInfoCopiadaAlias(false);
-    setInfoCopiadaCVU(false);
   };
 
   const reservarTurno = async () => {
@@ -151,7 +142,6 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
 
       const mensajeCodificado = encodeURIComponent(mensaje);
       const link = `https://wa.me/${cancha.telefono}?text=${mensajeCodificado}`;
-      setWhatsappLink(link);
 
       setTurnoConfirmado(true); // Muestra el modal de éxito
 
@@ -172,21 +162,6 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
     }
   };
 
-
-
-  const copiarAlPortapapeles = (texto, tipo) => {
-    if (!texto || texto === "No disponible") return;
-
-    navigator.clipboard.writeText(texto).then(() => {
-      if (tipo === "alias") {
-        setInfoCopiadaAlias(true);
-        setTimeout(() => setInfoCopiadaAlias(false), 2000);
-      } else if (tipo === "cvu") {
-        setInfoCopiadaCVU(true);
-        setTimeout(() => setInfoCopiadaCVU(false), 2000);
-      }
-    });
-  };
 
   return (
     <div
@@ -264,7 +239,7 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
             <button
               disabled={!formData.nombre || formData.dni.length !== 8}
               onClick={() => setShowModal(true)}
-              className={`w-full py-4 rounded-xl font-bold text-white text-lg sm:text-xl transition-all duration-300 transform active:scale-95 shadow-lg ${formData.nombre && formData.dni  && formData.dni.length === 8 ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-600 hover:to-green-700"
+              className={`w-full py-4 rounded-xl font-bold text-white text-lg sm:text-xl transition-all duration-300 transform active:scale-95 shadow-lg ${formData.nombre && formData.dni && formData.dni.length === 8 ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-600 hover:to-green-700"
                 : "bg-gray-300 cursor-not-allowed"
                 }`}
             >
@@ -298,71 +273,79 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
 
               {/* Contenido scrollable */}
               <div className="overflow-y-auto px-4 sm:px-5 py-4 flex-1">
+  {/* Datos del cliente */}
+  <div className="space-y-3 mb-4">
+    {[
+      { label: "Nombre", value: formData.nombre, icon: <FaUser /> },
+      { label: "DNI", value: formData.dni, icon: <FaIdCard /> },
+      // {
+      //   label: "Teléfono",
+      //   value: formData.telefono,
+      //   icon: <FaPhone />,
+      // },
+      {
+        label: "Precio",
+        value: `$${Math.trunc(turno.precio)}`,
+        icon: <FaMoneyBill1Wave />,
+      },
+      {
+        label: "Seña",
+        value: `$${Math.trunc(cancha.adelanto)}`,
+        icon: <FaMoneyBillWave />,
+      },
+    ].map((item, index) => (
+      <div key={index} className="flex items-center gap-2 sm:gap-3">
+        <div className="w-8 h-8 sm:w-9 sm:h-9 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700">
+          {item.icon}
+        </div>
+        <span className="font-medium text-gray-800 text-sm sm:text-base">
+          {item.label}:
+        </span>
+        <span className="text-gray-600 text-sm sm:text-base truncate">
+          {item.value || "No disponible"}
+        </span>
+      </div>
+    ))}
+  </div>
 
-                {/* Datos del cliente */}
-                <div className="space-y-3 mb-4">
-                  {[
-                    { label: "Nombre", value: formData.nombre, icon: <FaUser /> },
-                    { label: "DNI", value: formData.dni, icon: <FaIdCard /> },
-                    // {
-                    //   label: "Teléfono",
-                    //   value: formData.telefono,
-                    //   icon: <FaPhone />,
-                    // },
-                    {
-                      label: "Precio",
-                      value: `$${Math.trunc(turno.precio)}`,
-                      icon: <FaMoneyBill1Wave />,
-                    },
-                    {
-                      label: "Seña",
-                      value: `$${Math.trunc(cancha.adelanto)}`,
-                      icon: <FaMoneyBillWave />,
-                    },
-                  ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700">
-                        {item.icon}
-                      </div>
-                      <span className="font-medium text-gray-800 text-sm sm:text-base">
-                        {item.label}:
-                      </span>
-                      <span className="text-gray-600 text-sm sm:text-base truncate">
-                        {item.value || "No disponible"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+  {/* Detalles del turno */}
+  <div className="bg-emerald-50 px-4 py-3 mx-2 my-3 rounded-lg border border-emerald-100">
+    <p className="font-semibold text-emerald-800 text-sm sm:text-base mb-1">
+      Detalles del turno:
+    </p>
+    <p className="text-xs sm:text-sm text-gray-700">
+      <span className="capitalize">{cancha?.nombre}</span> -{" "}
+      {formatearFecha(turno?.fecha)} a las {formatearHora(turno?.hora)} hs
+    </p>
+  </div>
 
-                {/* Detalles del turno */}
-                <div className="bg-emerald-50 px-4 py-3 mx-2 my-3 rounded-lg border border-emerald-100">
-                  <p className="font-semibold text-emerald-800 text-sm sm:text-base mb-1">
-                    Detalles del turno:
-                  </p>
-                  <p className="text-xs sm:text-sm text-gray-700">
-                    <span className="capitalize">{cancha?.nombre}</span> -{" "}
-                    {formatearFecha(turno?.fecha)} a las{" "}
-                    {formatearHora(turno?.hora)} hs
-                  </p>
-                </div>
+  {/* Método de pago */}
+  <div className="mb-4">
+    <label className="block text-gray-700 font-medium mb-2 text-sm">
+      Método de pago de seña:
+    </label>
+    <select
+      name="metodoPago"
+      value={formData.metodoPago}
+      onChange={handleChange}
+      className="w-full p-2 sm:p-3 border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:outline-none shadow-sm transition text-sm"
+    >
+      <option value="efectivo">Efectivo</option>
+      <option value="transferencia">Transferencia</option>
+    </select>
+  </div>
 
-                {/* Método de pago */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2 text-sm">
-                    Método de pago de seña:
-                  </label>
-                  <select
-                    name="metodoPago"
-                    value={formData.metodoPago}
-                    onChange={handleChange}
-                    className="w-full p-2 sm:p-3 border border-emerald-200 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:outline-none shadow-sm transition text-sm"
-                  >
-                    <option value="efectivo">Efectivo</option>
-                    <option value="transferencia">Transferencia</option>
-                  </select>
-                </div>
-
-              </div>
+  {/* AVISO IMPORTANTE */}
+  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-md shadow-inner mb-4">
+    <p className="text-yellow-800 text-xs sm:text-sm font-medium">
+      <span className="inline-block mr-1 align-middle">
+        ⚠️
+      </span>
+      <strong className="font-bold">AVISO:</strong> Tienes{" "}
+      <span className="font-semibold text-red-600">30 minutos</span> para enviarle el comprobante de la seña o, si es en efectivo, coordinar el pago. De lo contrario, la solicitud se cancelará automáticamente.
+    </p>
+  </div>
+</div>
 
               {/* Botones */}
               <div className="flex flex-col sm:flex-row gap-2 px-4 sm:px-5 pb-5 pt-2 border-t border-gray-200 bg-gray-50">

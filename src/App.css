@@ -53,3 +53,18 @@ mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+/* Scrollbar fino personalizado */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #10b981; /* emerald-500 */
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f0fdfa; /* bg-emerald-50 */
+}
