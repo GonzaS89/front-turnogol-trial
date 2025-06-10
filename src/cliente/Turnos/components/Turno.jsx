@@ -20,7 +20,7 @@ export const Turno = ({ id, estado, cancha, hora, precio }) => {
       <Link
         to={estado === "disponible" ? "/confirmaciondeturno" : "#"}
         state={{ idCancha: cancha, idTurno: id }}
-        className={`block w-full p-4 xl:py-10 sm:p-5 rounded-xl sm:rounded-2xl relative overflow-hidden ${
+        className={`block w-full p-4 xl:py-10 sm:p-5 rounded-sm sm:rounded-2xl relative overflow-hidden ${
           estado === "disponible"
             ? "bg-white border-2 border-emerald-300/30 hover:border-emerald-400/50"
             : "bg-gray-100 border-2 border-gray-200/50"

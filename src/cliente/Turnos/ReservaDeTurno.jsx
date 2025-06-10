@@ -3,19 +3,23 @@ import { useCanchas } from "../../customHooks/useCanchas";
 import { useObtenerTurnosxCancha } from "../../customHooks/useObtenerTurnosxCancha";
 import { FaFutbol, FaClock } from "react-icons/fa";
 import { Turno } from "./components/Turno";
-// Obtener el id de la cancha desde el estado de la ubicación
+import { useMemo, useState } from "react";
 
 export default function ReservaDeTurno() {
   const location = useLocation();
   const { seccioncancha: seccion } = useParams();
   const { idCancha: canchaId } = location.state || {};
   const { datos: canchas, isLoading: loadingCancha } = useCanchas();
-  const cancha = canchas.find((item) => item.seccion === seccion || item.id === canchaId);
-  const { turnos, isLoading, error } = useObtenerTurnosxCancha(canchaId);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
-  console.log("Datos de la cancha:", canchaId);
+  const cancha = useMemo(() => {
+    return canchas?.find(
+      (item) => item.seccion === seccion || item.id === canchaId
+    );
+  }, [canchas, seccion, canchaId]);
 
-  const fechaHoy = new Date().toLocaleDateString("sv-SE"); // "YYYY-MM-DD"
+  const { turnos, isLoading, error } = useObtenerTurnosxCancha(cancha?.id);
+  console.log(turnos);
 
   // Función para ordenar los turnos por hora
   const ordenarTurnos = (turnos) => {
@@ -29,9 +33,51 @@ export default function ReservaDeTurno() {
   };
 
   // Filtrar y ordenar turnos de hoy
-  const turnosDeHoy = ordenarTurnos(
-    turnos?.filter((turno) => turno.fecha.split("T")[0] === fechaHoy)
-  );
+
+  const fechasUnicas = turnos?.reduce((acc, turno) => {
+    if (!acc.find((t) => t.fecha === turno.fecha)) {
+      acc.push(turno);
+    }
+    return acc;
+  }, []);
+
+  const formatearFecha = (fecha) => {
+  const fechaValida = new Date(fecha);
+
+  if (isNaN(fechaValida.getTime())) {
+    return "Fecha inválida";
+  }
+
+  const dia = fechaValida.getUTCDate().toString().padStart(2, "0");
+  const mes = (fechaValida.getUTCMonth() + 1).toString().padStart(2, "0"); // Mes empieza en 0
+
+  return `${dia}/${mes}`;
+};
+  const turnosAgrupadosPorFecha = useMemo(() => {
+    if (!turnos || !Array.isArray(turnos)) return [];
+
+    const agrupados = {};
+
+    turnos.forEach((turno) => {
+      if (!turno.fecha) return;
+
+      const fechaStr = turno.fecha.split("T")[0]; // "YYYY-MM-DD"
+      if (!agrupados[fechaStr]) {
+        agrupados[fechaStr] = [];
+      }
+
+      agrupados[fechaStr].push(turno);
+    });
+
+    return Object.entries(agrupados).map(([fecha, turnos]) => ({
+      fecha,
+      turnos,
+    }));
+  }, [turnos]);
+
+  const turnosFiltrados = fechaSeleccionada
+  ? turnos?.filter((turno) => turno.fecha?.startsWith(fechaSeleccionada))
+  : turnos;
 
   return (
     <div
@@ -124,55 +170,79 @@ export default function ReservaDeTurno() {
         </header>
 
         <div className="flex-1 flex flex-col items-center">
-          {isLoading ? (
-            <div className="flex justify-center items-center h-40">
-              <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-emerald-500"></div>
-            </div>
-          ) : error ? (
-            <div className="bg-red-50 border border-red-200 rounded-lg sm:rounded-xl p-3 sm:p-4 text-sm sm:text-base text-red-700 text-center max-w-md w-full">
-              Error al cargar los turnos. Intente nuevamente.
-            </div>
-          ) : turnosDeHoy?.length === 0 ? (
-            <div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="bg-white rounded-lg sm:rounded-xl shadow-sm p-4 sm:p-6 text-center max-w-md w-full"
-            >
-              <FaClock className="mx-auto text-3xl sm:text-4xl text-gray-400 mb-2 sm:mb-3" />
-              <h3 className="text-base sm:text-lg font-medium text-gray-700 mb-1">
-                No hay turnos disponibles
-              </h3>
-              <p className="text-sm sm:text-base text-gray-500">
-                No hay turnos disponibles para hoy en esta cancha.
-              </p>
-            </div>
-          ) : (
-            <div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="w-full md:max-w-3xl xl:max-w-7xl"
-            >
-              <div className="rounded-lg sm:rounded-xl p-3 sm:p-4 xl:py-6 mb-1 sm:mb-2">
-                <p className="text-center text-sm sm:text-sm md:text-xl xl:text-2xl font-medium text-emerald-700">
-                  Turnos disponibles para hoy
-                </p>
-              </div>
+          {/* Carrusel de fechas */}
+      <div className="w-full md:max-w-3xl xl:max-w-7xl mt-6 relative">
+        {/* Botón izquierdo */}
+        <button
+          onClick={() => {
+            document.getElementById("carrusel-fechas").scrollBy({ left: -120, behavior: "smooth" });
+          }}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 
+                     w-10 h-10 rounded-full flex items-center justify-center
+                     text-emerald-600 bg-white/60 backdrop-blur-sm shadow-lg
+                     hover:bg-white/80 active:bg-white transition-all duration-200"
+          aria-label="Anterior"
+        >
+          ❮
+        </button>
 
-              <div className="flex flex-col md:grid md:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4 place-items-center">
-                {turnosDeHoy?.map((turno) => (
-                  <Turno
-                    id={turno.id}
-                    hora={turno.hora}
-                    estado={turno.estado}
-                    precio={turno.precio}
-                    cancha={cancha.id}
-                  />
-                ))}
-              </div>
+        {/* Carrusel de fechas */}
+        <div
+          id="carrusel-fechas"
+          className="flex gap-4 overflow-x-auto hide-scrollbar py-2 px-12"
+        >
+          {turnosAgrupadosPorFecha.map(({ fecha }, index) => (
+            <div
+              key={index}
+              onClick={() => setFechaSeleccionada(fecha)}
+              className={`text-xl py-2 px-5 cursor-pointer rounded-lg whitespace-nowrap transition-all ${
+                fechaSeleccionada === fecha
+                  ? "bg-emerald-500 text-white scale-105"
+                  : "bg-emerald-100 hover:bg-emerald-200 text-emerald-800"
+              }`}
+            >
+              {formatearFecha(fecha)}
             </div>
-          )}
+          ))}
+        </div>
+
+        {/* Botón derecho */}
+        <button
+          onClick={() => {
+            document.getElementById("carrusel-fechas").scrollBy({ left: 120, behavior: "smooth" });
+          }}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 
+                     w-10 h-10 rounded-full flex items-center justify-center
+                     text-emerald-600 bg-white/60 backdrop-blur-sm shadow-lg
+                     hover:bg-white/80 active:bg-white transition-all duration-200"
+          aria-label="Siguiente"
+        >
+          ❯
+        </button>
+      </div>
+
+      {/* Lista de turnos filtrados por fecha */}
+      <div className="mt-8 w-full px-4 sm:px-6">
+        {turnosFiltrados && turnosFiltrados.length > 0 ? (
+          <div className="grid grid-cols-1 gap-1">
+            {turnosFiltrados.map((turno, i) => (
+              <Turno
+                key={i}
+                id={turno.id}
+                estado={turno.estado}
+                cancha={turno.cancha_id}
+                hora={turno.hora}
+                precio={turno.precio}
+                fecha={turno.fecha}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500 text-center py-8">
+            No hay turnos disponibles para esta fecha.
+          </p>
+        )}
+      </div>
         </div>
       </div>
     </div>

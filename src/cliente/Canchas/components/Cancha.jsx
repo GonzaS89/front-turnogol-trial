@@ -1,27 +1,9 @@
 import { Link } from "react-router-dom";
 import { FaArrowRight, FaMapMarkerAlt,FaBan,FaCheckCircle } from "react-icons/fa";
 import { useObtenerTodosLosTurnos } from "../../../customHooks/useObtenerTodosLosTurnos";
-import { format } from "date-fns";
 
 export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad, turnosDisponibles }) => {
-  const { turnos } = useObtenerTodosLosTurnos();
-
-  function formatearFecha(fechaISO) {
-    const fecha = new Date(fechaISO);
-    return format(fecha, "dd-MM-yyyy");
-  }
-
-  function getFechaHoy() {
-    const hoy = new Date();
-
-    const dia = String(hoy.getDate()).padStart(2, "0");
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); // Los meses empiezan en 0
-    const anio = hoy.getFullYear();
-
-    return `${dia}-${mes}-${anio}`;
-  }
-
-  
+  const { turnos } = useObtenerTodosLosTurnos();  
 
   return (
    <div

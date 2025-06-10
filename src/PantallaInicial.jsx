@@ -7,17 +7,17 @@ import {
   FaWhatsapp,
   FaRegHandshake,
   FaTimes,
-  FaCheck
+  FaCheck,
 } from "react-icons/fa";
 import imgHero from "/hero-cancha.jpeg";
 import logo from "/logo.png"; // Asegúrate de tener esta imagen
 // Asegúrate de tener esta imagen
 
-export default function PantallaInicial () {
+export default function PantallaInicial() {
   const [showModal, setShowModal] = useState(false);
 
   return (
-     <section className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-emerald-900 to-emerald-700">
+    <section className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-emerald-900 to-emerald-700">
       {/* Fondo - solo en móvil */}
       <div className="lg:hidden absolute h-screen inset-0 bg-black/20 backdrop-blur-sm z-10">
         <img
@@ -56,33 +56,40 @@ export default function PantallaInicial () {
             src="/logo.png"
             alt="TurnoGol Logo"
             className="w-[140px] sm:w-[180px] xl:w-[250px] mx-auto lg:mx-0"
-          />  
+          />
           {/* Espacio entre logo y título */}
           <div className="flex flex-col justify-center gap-6 h-2/3">
-              {/* Título */}
-              <div>
+            {/* Título */}
+            <div>
               <h1 className="text-4xl sm:text-5xl xl:text-7xl font-extrabold leading-tight bg-gradient-to-r from-green-400 via-emerald-500 to-teal-600 bg-clip-text text-transparent">
-            Bienvenido a TurnoGol
-          </h1>
+                Bienvenido a TurnoGol
+              </h1>
 
-          {/* Descripción */}
-          <p className="text-base sm:text-lg md:text-base xl:text-2xl text-gray-200 max-w-lg mx-auto lg:mx-0 w-full">
-            Tu plataforma para reservar canchas de fútbol de forma rápida y sencilla. ¡Disfruta del mejor fútbol con amigos!
-          </p>
-              </div>
-          
+              {/* Descripción */}
+              <p className="text-base sm:text-lg md:text-base xl:text-2xl text-gray-200 max-w-lg mx-auto lg:mx-0 w-full">
+                Tu plataforma para reservar canchas de fútbol de forma rápida y
+                sencilla. ¡Disfruta del mejor fútbol con amigos!
+              </p>
+            </div>
 
-          {/* Botón */}
-          <Link
-            to="/canchas"
-            className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 active:scale-95 w-full sm:w-auto xl:text-2xl xl:py-4"
-          >
-            <FaFutbol className="text-lg xl:text-2xl" />
-            <span>Quiero reservar un turno</span>
-            <FaArrowRight className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
-          </Link>
+            {/* Botón */}
+            <Link
+              to="/canchas"
+              className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 active:scale-95 w-full sm:w-auto xl:text-2xl xl:py-4"
+            >
+              <FaFutbol className="text-lg xl:text-2xl" />
+              <span>Quiero reservar un turno</span>
+              <FaArrowRight className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
+            <Link
+              to="/login"
+              className="group inline-flex items-center justify-center gap-3 bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-gray-900/30 transition-all duration-300 active:scale-95 w-full sm:w-auto xl:text-2xl xl:py-4 mt-4"
+            >
+              <FaRegHandshake className="text-lg xl:text-2xl" />
+              <span>Acceso para propietarios</span>
+              <FaArrowRight className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
           </div>
-          
 
           {/* Info trabajo */}
           <div
@@ -137,15 +144,21 @@ export default function PantallaInicial () {
                   <div className="p-3 bg-emerald-100 rounded-full">
                     <FaRegHandshake className="text-emerald-600 text-xl" />
                   </div>
-                  <h2 className="text-2xl font-bold text-emerald-800">Sumá tu cancha a TurnoGol</h2>
+                  <h2 className="text-2xl font-bold text-emerald-800">
+                    Sumá tu cancha a TurnoGol
+                  </h2>
                 </div>
 
                 <p className="text-gray-600 mb-6">
-                  Si sos dueño de una cancha de fútbol y querés aumentar tus reservas, ¡este es el momento! Con TurnoGol, podés gestionar tus turnos de forma fácil y rápida.
+                  Si sos dueño de una cancha de fútbol y querés aumentar tus
+                  reservas, ¡este es el momento! Con TurnoGol, podés gestionar
+                  tus turnos de forma fácil y rápida.
                 </p>
 
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-emerald-700 mb-3">Beneficios:</h3>
+                  <h3 className="text-lg font-semibold text-emerald-700 mb-3">
+                    Beneficios:
+                  </h3>
                   <ul className="space-y-3">
                     {[
                       "Gestión automatizada de reservas 24/7",
@@ -161,10 +174,12 @@ export default function PantallaInicial () {
                 </div>
 
                 <div className="border-t border-gray-200 pt-6">
-                  <h3 className="text-lg font-semibold text-emerald-700 mb-4">Contacto directo:</h3>
+                  <h3 className="text-lg font-semibold text-emerald-700 mb-4">
+                    Contacto directo:
+                  </h3>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <a
-                      href="https://wa.me/5493814482619" 
+                      href="https://wa.me/5493814482619"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="group flex items-center justify-center sm:justify-start gap-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-4 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
@@ -181,4 +196,4 @@ export default function PantallaInicial () {
       </AnimatePresence>
     </section>
   );
-};
+}

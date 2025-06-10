@@ -44,3 +44,12 @@ background-size:cover;
 background-position:center center;
 mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
