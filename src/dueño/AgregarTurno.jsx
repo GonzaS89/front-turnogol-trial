@@ -93,7 +93,7 @@ export default function AgregarTurno() {
     const hora = parseInt(horaIngresada.split(":")[0], 10);
     const cambioTarifa = cancha?.cambio_de_tarifa !== undefined ? parseInt(cancha.cambio_de_tarifa, 10) : 20;
 
-    return hora >= cambioTarifa || hora === 0
+    return hora > cambioTarifa || hora === 0
       ? cancha?.tarifa2 || 0
       : cancha?.tarifa1 || 0;
   };
