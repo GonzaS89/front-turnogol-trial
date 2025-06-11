@@ -59,7 +59,7 @@ export default function Canchas() {
 
   return (
     // Contenedor principal: ocupa toda la pantalla, con un degradado de fondo y flexbox para centrar el contenido
-    <section className="w-full min-h-screen flex flex-col items-center py-6 px-2 sm:px-4 ">
+    <section className="w-full min-h-screen flex flex-col items-center py-6 px-2 sm:px-4 relative z-10">
       <div className="absolute inset-0 z-0 opacity-10">
         <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none">
           <circle cx="25" cy="25" r="10" fill="url(#gradientCircle)" opacity="0.6"/>
@@ -81,7 +81,7 @@ export default function Canchas() {
       <div className="w-full max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto flex flex-col items-center px-3 sm:px-5">
         {/* Header de la página */}
         <header className="mb-8 sm:mb-10 text-center w-full">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-emerald-600">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-emerald-600 z-50">
             ¿Listo para jugar?
           </h1>
           <p className="mt-2 text-base sm:text-lg text-gray-600 max-w-md mx-auto">
@@ -206,7 +206,7 @@ export default function Canchas() {
                   <p className="text-gray-700 text-base sm:text-lg xl:text-xl text-center font-medium mb-6">
                     Seleccioná una cancha para reservar tu turno:
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                  <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6">
                     {filteredCanchas.map((cancha) => (
                       <Cancha
                         key={cancha.id}

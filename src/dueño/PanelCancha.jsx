@@ -80,7 +80,7 @@ export default function PanelCancha() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="min-h-screen w-full flex flex-col items-center justify-start bg-gradient-to-br from-emerald-50 to-green-100 font-sans p-4 sm:p-6 lg:p-8"
+      className="relative z-10 min-h-screen w-full flex flex-col items-center justify-start font-sans p-4 sm:p-6 lg:p-8"
     >
       
       {/* Botón de cerrar sesión */}

@@ -243,8 +243,8 @@ export default function VerTurnos() {
   // Mientras carga o si no hay datos de cancha
   if (!cancha) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center p-8 bg-white shadow-xl rounded-lg border border-gray-200">
+      <div className="z-10 min-h-screen flex items-center justify-center p-4">
+        <div className="text-center p-8 shadow-xl rounded-lg border border-gray-200">
           <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-xl font-semibold text-gray-800">Cargando datos de la cancha...</h2>
           <p className="mt-2 text-gray-600">Por favor espera un momento.</p>
@@ -254,7 +254,7 @@ export default function VerTurnos() {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center text-gray-800 font-sans p-4 sm:p-6 lg:p-8">
+    <div className="z-10 min-h-screen w-full flex flex-col items-center text-gray-800 font-sans p-4 sm:p-6 lg:p-8">
       {/* Contenedor principal de la página */}
       <div className="w-full max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto">
         {/* Header de la página */}

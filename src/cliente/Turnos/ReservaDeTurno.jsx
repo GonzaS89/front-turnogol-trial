@@ -228,7 +228,7 @@ const turnosFiltrados = fechaSeleccionada
       </div>
 
       {/* Contenido principal de la reserva (selector de fechas y turnos) */}
-      <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 py-6 shadow-inner -mt-4 sm:-mt-6 rounded-t-3xl relative z-20">
+      <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 py-6 shadow-inner mt-2 xl:mt-6 rounded-t-3xl relative z-20">
         <header className="mb-6 sm:mb-8 text-center w-full">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-emerald-600">
             Elegí tu Turno
@@ -371,7 +371,7 @@ const turnosFiltrados = fechaSeleccionada
         {/* Lista de turnos filtrados por fecha */}
         <div className="mt-8 w-full lg:max-w-7xl px-4 sm:px-6">
   {turnosFiltrados && turnosFiltrados.length > 0 ? (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-1 lg:gap-2">
       {/* Esto se mapea sobre turnosFiltrados, que ya está ordenado */}
       {turnosFiltrados.map((turno, i) => (
         <Turno

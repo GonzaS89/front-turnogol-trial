@@ -67,7 +67,7 @@ export default function PantallaInicial() {
         >
           <FaRegHandshake className="text-lg" />
           <span className="hidden sm:inline">Acceso propietarios</span>
-          <span className="sm:hidden">Propietarios</span>
+          <span className="sm:hidden">Acceso pietarios</span>
           <FaArrowRight className="text-sm group-hover:translate-x-1 transition-transform" />
         </Link>
       </motion.div>

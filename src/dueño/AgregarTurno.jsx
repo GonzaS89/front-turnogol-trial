@@ -136,7 +136,7 @@ export default function AgregarTurno() {
 
   if (!cancha) {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-white p-4">
+        <div className="min-h-screen flex items-center justify-center p-4">
             <p className="text-xl text-gray-700 font-medium animate-pulse">
                 Cargando información de la cancha o datos no disponibles...
             </p>
