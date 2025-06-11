@@ -39,7 +39,7 @@ function Footer() {
           className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-colors duration-200 text-base shadow-md hover:shadow-lg transform hover:-translate-y-0.5 mb-8"
         >
           <FaWhatsapp className="text-xl" />
-          <span>Enviar WhatsApp</span>
+          <span>Contactános</span>
         </a>
 
         {/* Derechos de Autor y Atribución */}
