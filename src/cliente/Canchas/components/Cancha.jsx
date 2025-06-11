@@ -8,7 +8,7 @@ export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad,
       key={index}
      
       className={`
-        transform overflow-hidden rounded-2xl shadow-lg bg-white
+        transform overflow-hidden rounded-2xl shadow-xl bg-white
         hover:shadow-xl transition-all duration-300 border border-gray-100
       `}
     >
@@ -24,7 +24,7 @@ export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad,
         role="button"
       >
 
-        <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden shadow-sm flex-shrink-0">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 xl:w-24 xl:h-24 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
           <img
             src={logo}
             alt={`Logo de ${nombre}`}
@@ -40,7 +40,7 @@ export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad,
         {/* Information section */}
         <div className="flex-1 min-w-0">
           {/* Court Name */}
-          <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 group-hover:text-emerald-600 transition-colors capitalize truncate">
+          <h3 className="text-base sm:text-xl xl:text-xl font-bold text-gray-800 group-hover:text-emerald-600 transition-colors capitalize truncate">
             {nombre}
           </h3>
 

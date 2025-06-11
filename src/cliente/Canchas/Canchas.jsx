@@ -66,10 +66,10 @@ export default function Canchas() {
           <circle cx="75" cy="75" r="15" fill="url(#gradientCircle)" opacity="0.6"/>
           <path d="M0 50 L20 70 L50 40 L80 60 L100 40 V0 H0 Z" fill="url(#gradientPath)" opacity="0.3"/>
           <defs>
-            <radialGradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <radiaxlradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
               <stop offset="0%" stopColor="#34D399" /> {/* green-400 */}
               <stop offset="100%" stopColor="#059669" /> {/* emerald-600 */}
-            </radialGradient>
+            </radiaxlradient>
             <linearGradient id="gradientPath" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10B981" /> {/* emerald-500 */}
               <stop offset="100%" stopColor="#065F46" /> {/* green-900 */}
@@ -78,18 +78,18 @@ export default function Canchas() {
         </svg>
       </div>
       {/* Contenido centrado y con ancho máximo */}
-      <div className="w-full max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto flex flex-col items-center px-3 sm:px-5">
+      <div className="w-full max-w-4xl xl:max-w-6xl xl:max-w-7xl mx-auto flex flex-col items-center px-3 sm:px-5">
         {/* Header de la página */}
         <header className="mb-8 sm:mb-10 text-center w-full">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-emerald-600 z-50">
+          <h1 className="text-3xl md:text-4xl xl:text-5xl xl:text-6xl font-extrabold tracking-tight text-emerald-600 z-50">
             ¿Listo para jugar?
           </h1>
-          <p className="mt-2 text-base sm:text-lg text-gray-600 max-w-md mx-auto">
+          <p className="mt-2 text-base sm:text-xl text-gray-600 max-w-md mx-auto">
             Encuentra una cancha cerca de vos y reserva tu turno.
           </p>
 
           {/* Input de búsqueda - Centrado y más grande */}
-          <div className="relative w-full max-w-lg mx-auto mt-6 group">
+          <div className="relative w-full max-w-xl mx-auto mt-6 group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-transform duration-300 group-focus-within:scale-110 group-focus-within:text-emerald-600">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +111,7 @@ export default function Canchas() {
               placeholder="Buscar por nombre, localidad o provincia"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 shadow-lg focus:outline-none focus:ring-3 focus:ring-emerald-500 focus:border-transparent bg-white text-gray-800 placeholder-gray-400 transition-all duration-300 ease-in-out group-hover:shadow-xl text-base sm:text-lg"
+              className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 shadow-xl focus:outline-none focus:ring-3 focus:ring-emerald-500 focus:border-transparent bg-white text-gray-800 placeholder-gray-400 transition-all duration-300 ease-in-out group-hover:shadow-xl text-base sm:text-xl"
               aria-label="Buscar cancha"
             />
           </div>
@@ -139,7 +139,7 @@ export default function Canchas() {
               <h3 className="text-xl md:text-2xl font-semibold text-gray-800">
                 Empieza a buscar
               </h3>
-              <p className="text-base md:text-lg text-gray-600">
+              <p className="text-base md:text-xl text-gray-600">
                 Escribe el nombre, localidad o provincia de la cancha que buscas.
               </p>
             </div>
@@ -157,8 +157,8 @@ export default function Canchas() {
 
           {/* Mensaje de error */}
           {error && (
-            <div className="p-6 text-red-700 text-center bg-red-50 rounded-lg border border-red-100 shadow-md">
-              <p className="text-lg font-medium">
+            <div className="p-6 text-red-700 text-center bg-red-50 rounded-xl border border-red-100 shadow-md">
+              <p className="text-xl font-medium">
                 Hubo un error al cargar las canchas. Inténtalo nuevamente.
               </p>
             </div>
@@ -169,7 +169,7 @@ export default function Canchas() {
             <>
               {filteredCanchas.length === 0 && searchTerm.trim() !== "" ? (
                 // Muestra este mensaje solo si hay un término de búsqueda y no hay resultados
-                <div className="flex flex-col items-center justify-center gap-5 p-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg text-center max-w-sm mx-auto transform transition-all hover:shadow-xl duration-300">
+                <div className="flex flex-col items-center justify-center gap-5 p-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl text-center max-w-sm mx-auto transform transition-all hover:shadow-xl duration-300">
                   {/* Icono con efecto */}
                   <div className="p-3 rounded-full bg-emerald-100 text-emerald-500 transition-transform duration-300 group-hover:rotate-12">
                     <svg
@@ -190,20 +190,20 @@ export default function Canchas() {
                   <h3 className="text-xl md:text-2xl font-bold text-gray-800">
                     No encontramos canchas
                   </h3>
-                  <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+                  <p className="text-base md:text-xl text-gray-600 leading-relaxed">
                     No hay canchas que coincidan con tu búsqueda. Prueba con
                     otra palabra clave.
                   </p>
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="mt-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-500 text-white text-base font-semibold rounded-lg shadow-md hover:from-emerald-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 transition"
+                    className="mt-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-500 text-white text-base font-semibold rounded-xl shadow-md hover:from-emerald-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 transition"
                   >
                     Limpiar búsqueda
                   </button>
                 </div>
               ) : (
                 <>
-                  <p className="text-gray-700 text-base sm:text-lg xl:text-xl text-center font-medium mb-6">
+                  <p className="text-gray-700 text-base sm:text-xl xl:text-xl text-center font-medium mb-6">
                     Seleccioná una cancha para reservar tu turno:
                   </p>
                   <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6">

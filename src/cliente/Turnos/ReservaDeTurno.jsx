@@ -139,10 +139,10 @@ const turnosFiltrados = fechaSeleccionada
           <circle cx="75" cy="75" r="15" fill="url(#gradientCircle)" opacity="0.6"/>
           <path d="M0 50 L20 70 L50 40 L80 60 L100 40 V0 H0 Z" fill="url(#gradientPath)" opacity="0.3"/>
           <defs>
-            <radialGradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <radiaxlradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
               <stop offset="0%" stopColor="#34D399" /> {/* green-400 */}
               <stop offset="100%" stopColor="#059669" /> {/* emerald-600 */}
-            </radialGradient>
+            </radiaxlradient>
             <linearGradient id="gradientPath" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10B981" /> {/* emerald-500 */}
               <stop offset="100%" stopColor="#065F46" /> {/* green-900 */}
@@ -151,7 +151,7 @@ const turnosFiltrados = fechaSeleccionada
         </svg>
       </div>
       {/* Header con imagen de portada y superposición de información */}
-      <div className="relative h-44 sm:h-56 md:h-64 lg:h-72 xl:h-80 w-full overflow-hidden">
+      <div className="relative h-44 sm:h-56 md:h-64 xl:h-72 xl:h-80 w-full overflow-hidden">
         {/* Imagen de portada */}
         {cancha?.portada ? (
           <img
@@ -175,14 +175,14 @@ const turnosFiltrados = fechaSeleccionada
 
         {/* Información de la cancha superpuesta */}
         {!loadingCancha && (
-          <div className="absolute inset-0 flex items-center justify-start px-4 sm:px-6 lg:px-8 pb-4 sm:pb-0 z-10">
+          <div className="absolute inset-0 flex items-center justify-start px-4 sm:px-6 xl:px-8 pb-4 sm:pb-0 z-10">
             {" "}
             {/* Botón de volver al panel - similar a VerTurnos */}
             {/* Contenido de la información de la cancha (logo + detalles) */}
-            <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 w-full xl:w-[1200px] xl:mx-auto">
+            <div className="flex items-center gap-3 sm:gap-4 xl:gap-6 w-full xl:w-[1200px] xl:mx-auto">
               {/* Logo circular */}
               <div
-                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-full border-3 border-white shadow-xl overflow-hidden flex-shrink-0
+                className="w-16 h-16 sm:w-20 sm:h-20 xl:w-28 xl:h-28 xl:w-32 xl:h-32 rounded-full border-3 border-white shadow-xl overflow-hidden flex-shrink-0
               transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
               >
                 {cancha?.logo ? (
@@ -193,7 +193,7 @@ const turnosFiltrados = fechaSeleccionada
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
-                    <FaFutbol className="text-white text-3xl sm:text-4xl lg:text-5xl drop-shadow-md" />
+                    <FaFutbol className="text-white text-3xl sm:text-4xl xl:text-5xl drop-shadow-md" />
                   </div>
                 )}
               </div>
@@ -201,20 +201,20 @@ const turnosFiltrados = fechaSeleccionada
               <div
                 className="flex flex-col justify-center
               text-white p-4 sm:p-5 md:p-6 rounded-2xl
-              max-w-sm sm:max-w-md lg:max-w-lg shadow-2xl
+              max-w-sm sm:max-w-md xl:max-w-xl shadow-2xl
               transform transition-all duration-300 hover:scale-[1.01]"
               >
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold capitalize tracking-wide leading-tight text-shadow-lg">
+                <h2 className="text-2xl sm:text-3xl xl:text-4xl xl:text-5xl font-extrabold capitalize tracking-wide leading-tight text-shadow-xl">
                   {cancha?.nombre || "Cancha"}
                 </h2>
-                <p className="text-sm sm:text-base lg:text-lg text-white/90 mt-1 flex items-center gap-2">
-                  <span className="text-emerald-300 text-lg">📍</span>
+                <p className="text-sm sm:text-base xl:text-xl text-white/90 mt-1 flex items-center gap-2">
+                  <span className="text-emerald-300 text-xl">📍</span>
                   {cancha?.direccion ? `${cancha.direccion} - ` : ""}
                   <span className="font-semibold">
                     {cancha?.localidad || "Localidad no disponible"}
                   </span>
                 </p>
-                <p className="text-xs sm:text-sm lg:text-base text-emerald-200 mt-1 flex items-center gap-2">
+                <p className="text-xs sm:text-sm xl:text-base text-emerald-200 mt-1 flex items-center gap-2">
                   <span className="text-emerald-300 text-base">💰</span>
                   <span className="font-semibold">
                     Precios por turno: ${Math.trunc(cancha?.tarifa1 || 0)} - $
@@ -228,7 +228,7 @@ const turnosFiltrados = fechaSeleccionada
       </div>
 
       {/* Contenido principal de la reserva (selector de fechas y turnos) */}
-      <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 py-6 shadow-inner mt-2 xl:mt-6 rounded-t-3xl relative z-20">
+      <div className="flex-1 flex flex-col items-center px-4 sm:px-6 xl:px-8 py-6 shadow-inner mt-2 xl:mt-6 rounded-t-3xl relative z-20">
         <header className="mb-6 sm:mb-8 text-center w-full">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-emerald-600">
             Elegí tu Turno
@@ -241,7 +241,7 @@ const turnosFiltrados = fechaSeleccionada
         </header>
 
         {/* Carrusel de fechas */}
-        <div className="w-full max-w-4xl lg:max-w-auto mx-auto mb-8 relative px-8">
+        <div className="w-full max-w-4xl xl:max-w-auto mx-auto mb-8 relative px-8">
           {/* Botones de navegación del carrusel */}
           <button
             onClick={() =>
@@ -249,7 +249,7 @@ const turnosFiltrados = fechaSeleccionada
                 .getElementById("carrusel-fechas")
                 .scrollBy({ left: -150, behavior: "smooth" })
             }
-            className="absolute -left-2 sm:-left-4 top-1/2 transform -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-emerald-700 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white active:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="absolute -left-2 sm:-left-4 top-1/2 transform -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-emerald-700 bg-white/80 backdrop-blur-md shadow-xl hover:bg-white active:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             aria-label="Anterior fecha"
           >
             ❮
@@ -306,13 +306,13 @@ const turnosFiltrados = fechaSeleccionada
                     }}
                     id={`date-card-${fecha}`} // Añadir un ID para facilitar el scrollIntoView
                     className={`
-                      min-w-[100px] sm:min-w-[120px] lg:min-w-[140px] 
+                      min-w-[100px] sm:min-w-[120px] xl:min-w-[140px] 
                       px-4 py-3 sm:px-5 sm:py-4 rounded-xl cursor-pointer 
                       transition-all duration-300 transform active:scale-95
                       text-center flex flex-col justify-center items-center
                       ${
                         fechaSeleccionada === fecha
-                          ? "bg-gradient-to-br from-emerald-600 to-green-700 text-white shadow-lg shadow-emerald-400/50 scale-105 ring-2 ring-emerald-300"
+                          ? "bg-gradient-to-br from-emerald-600 to-green-700 text-white shadow-xl shadow-emerald-400/50 scale-105 ring-2 ring-emerald-300"
                           : "bg-white border border-gray-200 text-gray-800 hover:bg-emerald-50 hover:shadow-md"
                       }
                       ${
@@ -361,7 +361,7 @@ const turnosFiltrados = fechaSeleccionada
                 .getElementById("carrusel-fechas")
                 .scrollBy({ left: 150, behavior: "smooth" })
             }
-            className="absolute -right-2 sm:-right-4 top-1/2 transform -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-emerald-700 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white active:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="absolute -right-2 sm:-right-4 top-1/2 transform -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-emerald-700 bg-white/80 backdrop-blur-md shadow-xl hover:bg-white active:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             aria-label="Siguiente fecha"
           >
             ❯
@@ -369,9 +369,9 @@ const turnosFiltrados = fechaSeleccionada
         </div>
 
         {/* Lista de turnos filtrados por fecha */}
-        <div className="mt-8 w-full lg:max-w-7xl sm:px-6">
+        <div className="mt-8 w-full xl:max-w-7xl sm:px-6">
   {turnosFiltrados && turnosFiltrados.length > 0 ? (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-1 lg:gap-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-1 xl:gap-2">
       {/* Esto se mapea sobre turnosFiltrados, que ya está ordenado */}
       {turnosFiltrados.map((turno, i) => (
         <Turno

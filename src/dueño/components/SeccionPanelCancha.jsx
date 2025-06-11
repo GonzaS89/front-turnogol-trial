@@ -79,7 +79,7 @@ export const SeccionPanelCancha = ({ seccion, titulo, cancha }) => {
         to={seccion}
         state={{ cancha }}
         className={`
-          group flex flex-col items-center justify-center w-full min-h-[120px] sm:min-h-[140px] lg:min-h-[160px] xl:min-h-[180px]
+          group flex flex-col items-center justify-center w-full min-h-[120px] xl:min-h-[180px]
           p-4 sm:p-6 rounded-2xl bg-white border ${colorClass}
           ${bgColorClass} transition-all duration-300
           shadow-md ${shadowColorClass}
@@ -91,12 +91,12 @@ export const SeccionPanelCancha = ({ seccion, titulo, cancha }) => {
         <div className="flex items-center justify-between w-full h-full relative z-10">
           <div className="flex items-center gap-4 sm:gap-5">
             <div
-              className={`p-3 sm:p-4 lg:p-5 rounded-xl ${iconBgColorClass} transition-colors duration-200 shadow-sm`}
+              className={`p-3 lg:p-5 rounded-xl ${iconBgColorClass} transition-colors duration-200 shadow-sm`}
             >
               {obtenerIcono(titulo)}
             </div>
             <span
-              className={`text-lg sm:text-xl md:text-2xl xl:text-3xl font-bold text-gray-800 ${titleColorClass} transition-colors duration-200`}
+              className={`text-lg sm:text-xl xl:text-3xl font-bold text-gray-800 ${titleColorClass} transition-colors duration-200`}
             >
               {titulo}
             </span>

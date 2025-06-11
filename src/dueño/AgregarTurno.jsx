@@ -145,7 +145,7 @@ export default function AgregarTurno() {
   }
 
   return (
-    <section className="min-h-screen w-full py-8 px-4 sm:px-6 lg:px-8 flex justify-center items-center font-sans text-gray-800 bg-gradient-to-br from-emerald-50 via-white to-emerald-50">
+    <section className="min-h-screen w-full py-8 px-4 sm:px-6 xl:px-8 flex justify-center items-center font-sans text-gray-800 bg-gradient-to-br from-emerald-50 via-white to-emerald-50">
       {/* Tarjeta principal del formulario */}
       <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-4xl w-full border border-gray-200 relative">
         {/* Botón de volver */}
@@ -161,10 +161,10 @@ export default function AgregarTurno() {
         <header className="flex flex-col sm:flex-row items-center justify-between mb-8 relative">
           {/* Título principal y nombre de la cancha */}
           <div className="text-center w-full flex-1">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-emerald-600 mt-4 sm:mt-0">
+            <h2 className="text-2xl sm:text-3xl xl:text-4xl font-extrabold text-emerald-600 mt-4 sm:mt-0">
               Agregar Turnos
             </h2>
-            <p className="text-sm sm:text-base lg:text-lg text-gray-600 mt-1">
+            <p className="text-sm sm:text-base xl:text-lg text-gray-600 mt-1">
               Cancha: <span className="uppercase font-semibold">{cancha?.nombre || "No especificado"}</span>
             </p>
           </div>
@@ -172,7 +172,7 @@ export default function AgregarTurno() {
         </header>
 
         {/* Contenido Principal: Dos Columnas (o apiladas en móvil) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xl:gap-8">
           {/* Columna Izquierda (Selección de Fecha y Horarios Existentes) */}
           <div className="flex flex-col gap-6">
             {/* Campo de fecha */}
@@ -228,7 +228,7 @@ export default function AgregarTurno() {
 
           {/* Columna Derecha (Formulario para Agregar Nuevos Horarios) */}
           <div className="flex flex-col gap-6">
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 mt-4 lg:mt-0">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 mt-4 xl:mt-0">
               Añadir Nuevos Horarios
             </h3>
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>

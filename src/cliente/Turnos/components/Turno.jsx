@@ -21,21 +21,21 @@ export const Turno = ({ id, estado, cancha, hora, precio }) => {
         stiffness: 300, // Mayor rigidez para un toque más enérgico
         damping: 22,    // Amortiguación que suaviza el rebote sin perder energía
       }}
-      className="w-full mb-4 px-2 sm:px-3 md:px-4 lg:px-0" // Padding responsivo
+      className="w-full mb-4 px-2 sm:px-3 md:px-4 xl:px-0" // Padding responsivo
     >
       {/* El enlace principal que ocupa toda la tarjeta */}
       <Link
         to={isDisponible ? "/confirmaciondeturno" : "#"}
         state={{ idCancha: cancha, idTurno: id }}
         className={`
-          relative block w-full p-4 sm:p-5 lg:p-6 rounded-2xl overflow-hidden
+          relative block w-full p-4 sm:p-5 xl:p-6 rounded-2xl overflow-hidden
           ${isDisponible
             ? "bg-white border-2 border-emerald-300 hover:border-emerald-500 cursor-pointer" // Fondo blanco, borde esmeralda más claro y hover más intenso
             : isReservado
             ? "bg-gray-100 border border-gray-200 cursor-not-allowed opacity-80" // Fondo gris claro, borde gris suave
             : "bg-yellow-50 border border-yellow-200 cursor-not-allowed opacity-80" // Fondo amarillo pastel para pendiente
           }
-          transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-3 focus:ring-emerald-400 focus:ring-opacity-75
+          transition-all duration-300 shadow-md hover:shadow-xl focus:outline-none focus:ring-3 focus:ring-emerald-400 focus:ring-opacity-75
         `}
       >
         {/* Shimmer effect - más vibrante y solo para disponibles */}
@@ -78,21 +78,21 @@ export const Turno = ({ id, estado, cancha, hora, precio }) => {
             {/* Detalles de hora, estado y precio */}
             <div>
               <span
-                className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight ${ // Hora muy grande y negrita
+                className={`text-2xl sm:text-3xl xl:text-4xl font-extrabold tracking-tight ${ // Hora muy grande y negrita
                   isDisponible ? "text-gray-900" : "text-gray-600" // Texto oscuro
                 }`}
               >
                 {formatearHora(hora)}
               </span>
               <p
-                className={`text-xs sm:text-sm lg:text-base font-medium mt-1 ${ // Texto de estado
+                className={`text-xs sm:text-sm xl:text-base font-medium mt-1 ${ // Texto de estado
                   isDisponible ? "text-emerald-700" : "text-gray-500" // Verde oscuro vibrante
                 }`}
               >
                 {isDisponible ? "¡Turno Libre!" : isReservado ? "No Disponible" : "En Confirmación"}
               </p>
               <p
-                className={`text-base sm:text-lg lg:text-xl font-bold mt-1 ${ // Precio más grande y negrita
+                className={`text-base sm:text-xl xl:text-xl font-bold mt-1 ${ // Precio más grande y negrita
                   isDisponible ? "text-gray-800" : "text-gray-600" // Texto oscuro
                 }`}
               >

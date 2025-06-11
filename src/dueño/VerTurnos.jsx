@@ -244,7 +244,7 @@ export default function VerTurnos() {
   if (!cancha) {
     return (
       <div className="z-10 min-h-screen flex items-center justify-center p-4">
-        <div className="text-center p-8 shadow-xl rounded-lg border border-gray-200">
+        <div className="text-center p-8 shadow-xl rounded-xl border border-gray-200">
           <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-xl font-semibold text-gray-800">Cargando datos de la cancha...</h2>
           <p className="mt-2 text-gray-600">Por favor espera un momento.</p>
@@ -254,19 +254,19 @@ export default function VerTurnos() {
   }
 
   return (
-    <div className="z-10 min-h-screen w-full flex flex-col items-center text-gray-800 font-sans p-4 sm:p-6 lg:p-8">
+    <div className="z-10 min-h-screen w-full flex flex-col items-center text-gray-800 font-sans p-4 sm:p-6 xl:p-8">
       {/* Contenedor principal de la página */}
-      <div className="w-full max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto">
+      <div className="w-full max-w-4xl xl:max-w-6xl xl:max-w-7xl mx-auto">
         {/* Header de la página */}
         <header className="flex flex-col sm:flex-row items-center justify-between mb-8 pb-4 border-b border-gray-200">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-600 hover:text-emerald-700 transition-colors px-3 py-2 rounded-lg text-lg mb-4 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="flex items-center gap-2 text-gray-600 hover:text-emerald-700 transition-colors px-3 py-2 rounded-xl text-xl mb-4 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <FaArrowLeft className="text-xl" />
             <span className="font-medium">Volver al Panel</span>
           </button>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent text-center flex-grow">
+          <h1 className="text-3xl sm:text-4xl xl:text-5xl font-extrabold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent text-center flex-grow">
             Gestión de Turnos
           </h1>
           <div className="w-auto sm:w-24"></div> {/* Spacer for alignment */}
@@ -274,23 +274,23 @@ export default function VerTurnos() {
 
         {/* Información de la cancha (Administrá tus turnos) */}
         <div className="bg-emerald-50 rounded-xl shadow-md p-5 mb-8 text-center border border-emerald-100">
-          <p className="text-base sm:text-lg lg:text-xl font-semibold text-gray-700">
+          <p className="text-base sm:text-xl xl:text-xl font-semibold text-gray-700">
             Administrá los turnos de tu cancha aquí.
           </p>
         </div>
 
         {/* Contenido principal: Loader, Error, No turnos, Lista de turnos */}
         {isLoading ? (
-          <div className="flex justify-center items-center h-64 bg-white rounded-xl shadow-lg border border-gray-200">
+          <div className="flex justify-center items-center h-64 bg-white rounded-xl shadow-xl border border-gray-200">
             <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-emerald-500"></div>
           </div>
         ) : error ? (
           <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700 text-center shadow-md">
             <FaExclamationTriangle className="mx-auto text-4xl mb-3 text-red-500" />
-            <p className="text-lg font-medium">{error}</p>
+            <p className="text-xl font-medium">{error}</p>
           </div>
         ) : Object.keys(turnosAgrupados).length === 0 ? (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center border border-gray-200">
+          <div className="bg-white rounded-xl shadow-xl p-8 text-center border border-gray-200">
             <FaCalendarAlt className="mx-auto text-5xl text-gray-400 mb-4" />
             <h3 className="text-xl sm:text-2xl font-bold text-gray-700 mb-2">
               No hay turnos registrados
@@ -310,16 +310,16 @@ export default function VerTurnos() {
                 >
                   {/* Encabezado de fecha (plegable) */}
                   <div
-                    className="flex justify-between items-center p-4 sm:p-5 lg:p-6 bg-gray-50 border-b border-emerald-100 cursor-pointer hover:bg-gray-100 transition-colors"
+                    className="flex justify-between items-center p-4 sm:p-5 xl:p-6 bg-gray-50 border-b border-emerald-100 cursor-pointer hover:bg-gray-100 transition-colors"
                     onClick={() => toggleFechaVisibility(fecha)}
                   >
-                    <h3 className="font-bold text-lg sm:text-xl lg:text-2xl text-emerald-800 flex items-center gap-3 relative">
+                    <h3 className="font-bold text-xl sm:text-xl xl:text-2xl text-emerald-800 flex items-center gap-3 relative">
                       <FaCalendarAlt className="text-emerald-600 text-2xl sm:text-3xl" />
                       <div className="flex flex-col items-start leading-tight">
-                        <span className="text-sm sm:text-base lg:text-lg font-semibold uppercase">
+                        <span className="text-sm sm:text-base xl:text-xl font-semibold uppercase">
                           {dayOfWeek}
                         </span>
-                        <span className="text-base sm:text-xl lg:text-2xl font-extrabold">
+                        <span className="text-base sm:text-xl xl:text-2xl font-extrabold">
                           {formattedDate}
                         </span>
                       </div>
@@ -335,7 +335,7 @@ export default function VerTurnos() {
                       )}
                     </h3>
                     <button
-                      className="text-2xl sm:text-3xl text-emerald-700 hover:text-emerald-900 px-1 py-1 rounded-lg hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="text-2xl sm:text-3xl text-emerald-700 hover:text-emerald-900 px-1 py-1 rounded-xl hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       aria-label={
                         fechaVisible[fecha]
                           ? "Ocultar turnos"
@@ -357,7 +357,7 @@ export default function VerTurnos() {
                       {turnosPorFecha.map((turno) => (
                         <li
                           key={turno.id}
-                          className={`py-4 px-3 sm:px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg mb-2 last:mb-0 transform hover:scale-[1.01]
+                          className={`py-4 px-3 sm:px-4 rounded-xl transition-all duration-200 shadow-md hover:shadow-xl mb-2 last:mb-0 transform hover:scale-[1.01]
                             ${
                               turno.condicion === "Pagado"
                                 ? "bg-purple-50 border-l-4 border-purple-500"
@@ -371,7 +371,7 @@ export default function VerTurnos() {
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             {/* Información del turno */}
                             <div className="flex items-start sm:items-center gap-4">
-                              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-lg">
+                              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-xl">
                                 <FaClock
                                   className={`${
                                     turno.condicion
@@ -429,7 +429,7 @@ export default function VerTurnos() {
                                     </div>
                                   </div>
                                 ) : (
-                                  <p className="text-emerald-600 font-semibold text-base sm:text-lg mt-2">
+                                  <p className="text-emerald-600 font-semibold text-base sm:text-xl mt-2">
                                     Disponible
                                   </p>
                                 )}
@@ -448,14 +448,14 @@ export default function VerTurnos() {
                                           "liberar"
                                         )
                                       }
-                                      className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
+                                      className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
                                     >
                                       <FaTimes />
                                       <span>Liberar</span>
                                     </button>
                                     <button
                                       onClick={() => setModalPagado(turno.id)}
-                                      className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
+                                      className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-xl transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
                                     >
                                       <FaMoneyBillWave />
                                       <span>Marcar Pagado</span>
@@ -467,7 +467,7 @@ export default function VerTurnos() {
                                 <>
                                   <button
                                     onClick={() => confirmarPendiente(turno.id)}
-                                    className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
+                                    className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-green-500 hover:bg-green-600 text-white font-medium rounded-xl transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
                                   >
                                     <FaCheck />
                                     <span>Confirmar</span>
@@ -479,7 +479,7 @@ export default function VerTurnos() {
                                         "rechazar"
                                       )
                                     }
-                                    className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
+                                    className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
                                   >
                                     <FaTimes />
                                     <span>Rechazar</span>
@@ -492,7 +492,7 @@ export default function VerTurnos() {
                                   onClick={() =>
                                     abrirModalConfirmacion(turno.id, "eliminar")
                                   }
-                                  className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
+                                  className="flex items-center gap-2 px-4 py-2 text-sm sm:text-base bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl transition-all active:scale-95 shadow-md transform hover:-translate-y-0.5"
                                   title="Eliminar turno"
                                 >
                                   <FaTrashAlt />
@@ -532,7 +532,7 @@ export default function VerTurnos() {
             <div className="flex justify-center gap-3 w-full">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-lg transition-colors duration-200 flex-1"
+                className="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-xl transition-colors duration-200 flex-1"
               >
                 Cancelar
               </button>
@@ -555,7 +555,7 @@ export default function VerTurnos() {
                   }
                   setShowModal(false);
                 }}
-                className="px-5 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors duration-200 flex-1"
+                className="px-5 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-xl transition-colors duration-200 flex-1"
               >
                 Confirmar
               </button>
@@ -574,7 +574,7 @@ export default function VerTurnos() {
             <div className="flex flex-col gap-3">
               <button
                 onClick={() => confirmarPago(modalPagado, "efectivo", "Pagado")}
-                className="px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg shadow-md transition-colors"
+                className="px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl shadow-md transition-colors"
               >
                 <FaMoneyBillWave className="inline mr-2" /> Efectivo
               </button>
@@ -582,7 +582,7 @@ export default function VerTurnos() {
                 onClick={() =>
                   confirmarPago(modalPagado, "transferencia", "Pagado")
                 }
-                className="px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg shadow-md transition-colors"
+                className="px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-xl shadow-md transition-colors"
               >
                 <FaIdCard className="inline mr-2" /> Transferencia
               </button>
@@ -622,7 +622,7 @@ export default function VerTurnos() {
             </p>
             <button
               onClick={() => setMensajeModal(null)}
-              className="mt-6 px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors shadow-md"
+              className="mt-6 px-6 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-colors shadow-md"
             >
               Cerrar
             </button>
