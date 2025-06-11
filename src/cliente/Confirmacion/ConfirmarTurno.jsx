@@ -3,15 +3,10 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCanchas } from "../../customHooks/useCanchas";
 import { useObtenerTurnosxCancha } from "../../customHooks/useObtenerTurnosxCancha";
-import {
-  FaUser,
-  FaIdCard,
-  FaWhatsapp,
-  FaMoneyBillWave,
-} from "react-icons/fa";
+import { FaUser, FaIdCard, FaMoneyBillWave } from "react-icons/fa";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
 import { GiConfirmed } from "react-icons/gi";
-import { User, CreditCard, Phone } from 'lucide-react';
+import { User, CreditCard, Phone } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 
 export default function ConfirmarTurno() {
@@ -24,7 +19,6 @@ export default function ConfirmarTurno() {
   const turno = turnos?.find((t) => t.id === idTurno);
   const [formData, setFormData] = useState({
     nombre: "",
-    telefono: "",
     dni: "",
     metodoPago: "efectivo",
   });
@@ -32,7 +26,6 @@ export default function ConfirmarTurno() {
   const [showModal, setShowModal] = useState(false);
   const [turnoConfirmado, setTurnoConfirmado] = useState(false);
   const [errorDni, setErrorDni] = useState("");
-  const [errorTelefono, setErrorTelefono] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -122,11 +115,13 @@ export default function ConfirmarTurno() {
 💰 Precio total del turno: $${Math.trunc(turno.precio)}
 💵 Seña a abonar: $${Math.trunc(cancha.adelanto)}
 
-💳 Método de pago de la seña: ${formData.metodoPago === "efectivo" ? "Efectivo" : "Transferencia"
-        }
+💳 Método de pago de la seña: ${
+        formData.metodoPago === "efectivo" ? "Efectivo" : "Transferencia"
+      }
 
-${formData.metodoPago === "transferencia"
-          ? `
+${
+  formData.metodoPago === "transferencia"
+    ? `
 He elegido pagar por transferencia a los siguientes datos:
 
 🏦 Alias: ${cancha.alias || "No disponible"}
@@ -136,10 +131,10 @@ He elegido pagar por transferencia a los siguientes datos:
 
 📌 Una vez realizado, te enviaré el comprobante por este medio.
 `
-          : `
+    : `
 Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y horario para realizar el pago de la seña.
 `
-        }
+}
 `.trim();
 
       const mensajeCodificado = encodeURIComponent(mensaje);
@@ -153,17 +148,18 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
       }, 500);
 
       setTimeout(() => {
-        closeModal()
-      }, 3000);// 1 segundo de espera
-
+        closeModal();
+      }, 3000); // 1 segundo de espera
     } catch (err) {
-      console.error("Error al reservar turno:", err.response?.data || err.message);
+      console.error(
+        "Error al reservar turno:",
+        err.response?.data || err.message
+      );
       alert("Hubo un error al procesar tu solicitud");
     } finally {
       setIsLoading(false);
     }
   };
-
 
   return (
     <div
@@ -180,27 +176,36 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
           className="w-full lg:w-[1000px] flex flex-col lg:flex-row justify-center items-center gap-4 max-[]:xl:max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-8xl"
         >
           {/* Tarjeta de información */}
-          <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 mb-6 md:mb-0
-                    border border-emerald-100 md:w-1/2 lg:w-2/3 xl:w-1/2
+          <div
+            className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 mb-6 md:mb-0
+                    border border-emerald-100 w- md:w-1/2 lg:w-2/3 xl:w-1/2
                     mx-auto transform transition-all duration-300
-                    hover:scale-[1.01] hover:shadow-emerald-300/40 focus-within:shadow-emerald-300/50">
+                    hover:scale-[1.01] hover:shadow-emerald-300/40 focus-within:shadow-emerald-300/50"
+          >
             {/* Form Title */}
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center
+            <h2
+              className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center
                      text-emerald-800 mb-8 uppercase tracking-wider
-                     bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent">
+                     bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent"
+            >
               Ingresá tus datos
             </h2>
 
             {/* Input Fields Section */}
-            <div className="space-y-6 sm:space-y-7 mb-8">
+            <div className="space-y-6 sm:space-y-6 mb-8">
               {/* Campo Nombre */}
-              <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
+              <div
+                className="flex items-center gap-4 bg-gray-50 px-5 py-1 lg:py-3.5 rounded-2xl
                         focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
-                        transition-all duration-300 group shadow-sm hover:shadow-md">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
+                        transition-all duration-300 group shadow-sm hover:shadow-md"
+              >
+                <div
+                  className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
                           flex items-center justify-center shadow-md transform transition-transform
-                          group-hover:scale-105 group-focus-within:scale-105">
-                  <User className="text-white text-xl sm:text-2xl" /> {/* Lucide User Icon */}
+                          group-hover:scale-105 group-focus-within:scale-105"
+                >
+                  <User className="text-white text-xl sm:text-2xl" />{" "}
+                  {/* Lucide User Icon */}
                 </div>
                 <input
                   type="text"
@@ -216,13 +221,18 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
               </div>
 
               {/* Campo DNI */}
-              <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
+              <div
+                className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
                         focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
-                        transition-all duration-300 group shadow-sm hover:shadow-md">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
+                        transition-all duration-300 group shadow-sm hover:shadow-md"
+              >
+                <div
+                  className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
                           flex items-center justify-center shadow-md transform transition-transform
-                          group-hover:scale-105 group-focus-within:scale-105">
-                  <CreditCard className="text-white text-xl sm:text-2xl" /> {/* Lucide CreditCard Icon */}
+                          group-hover:scale-105 group-focus-within:scale-105"
+                >
+                  <CreditCard className="text-white text-xl sm:text-2xl" />{" "}
+                  {/* Lucide CreditCard Icon */}
                 </div>
                 <input
                   type="number"
@@ -237,30 +247,9 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
                 />
               </div>
               {/* DNI Error Message */}
-              {errorDni && <p className="text-red-600 text-sm mt-1 px-2">{errorDni}</p>}
-
-              {/* Campo Teléfono (Uncomment to enable) */}
-              {/* <div className="flex items-center gap-4 bg-gray-50 px-5 py-3.5 rounded-2xl
-                        focus-within:ring-2 focus-within:ring-emerald-400 focus-within:bg-white
-                        transition-all duration-300 group shadow-sm hover:shadow-md">
-          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl
-                          flex items-center justify-center shadow-md transform transition-transform
-                          group-hover:scale-105 group-focus-within:scale-105">
-            <Phone className="text-white text-xl sm:text-2xl" />
-          </div>
-          <input
-            type="tel"
-            name="telefono"
-            placeholder="Teléfono"
-            value={formData.telefono}
-            onChange={handleChange}
-            required
-            className="flex-1 bg-transparent border-none outline-none
-                       text-base sm:text-lg text-gray-800 placeholder-gray-400
-                       font-medium"
-          />
-        </div> */}
-              {/* {errorTelefono && <p className="text-red-600 text-sm mt-1 px-2">{errorTelefono}</p>} */}
+              {errorDni && (
+                <p className="text-red-600 text-sm mt-1 px-2">{errorDni}</p>
+              )}
             </div>
 
             {/* Submit Button */}
@@ -269,10 +258,13 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
               onClick={() => setShowModal(true)} // Using the mock modal handler
               className={`w-full py-4 rounded-xl font-extrabold text-white text-lg sm:text-xl
                     transition-all duration-300 transform active:scale-98 shadow-xl
-                    ${formData.nombre && formData.dni && formData.dni.length === 8
-                  ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-600 hover:to-green-700 hover:shadow-emerald-500/50"
-                  : "bg-gray-300 text-gray-600 cursor-not-allowed shadow-none"
-                }`}
+                    ${
+                      formData.nombre &&
+                      formData.dni &&
+                      formData.dni.length === 8
+                        ? "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-600 hover:from-emerald-600 hover:to-green-700 hover:shadow-emerald-500/50"
+                        : "bg-gray-300 text-gray-600 cursor-not-allowed shadow-none"
+                    }`}
             >
               Continuar
             </button>
@@ -307,7 +299,11 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
                 {/* Datos del cliente */}
                 <div className="space-y-3 mb-4">
                   {[
-                    { label: "Nombre", value: formData.nombre, icon: <FaUser /> },
+                    {
+                      label: "Nombre",
+                      value: formData.nombre,
+                      icon: <FaUser />,
+                    },
                     { label: "DNI", value: formData.dni, icon: <FaIdCard /> },
                     // {
                     //   label: "Teléfono",
@@ -325,7 +321,10 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
                       icon: <FaMoneyBillWave />,
                     },
                   ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-2 sm:gap-3">
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 sm:gap-3"
+                    >
                       <div className="w-8 h-8 sm:w-9 sm:h-9 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700">
                         {item.icon}
                       </div>
@@ -346,7 +345,8 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
                   </p>
                   <p className="text-xs sm:text-sm text-gray-700">
                     <span className="capitalize">{cancha?.nombre}</span> -{" "}
-                    {formatearFecha(turno?.fecha)} a las {formatearHora(turno?.hora)} hs
+                    {formatearFecha(turno?.fecha)} a las{" "}
+                    {formatearHora(turno?.hora)} hs
                   </p>
                 </div>
 
@@ -369,11 +369,14 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
                 {/* AVISO IMPORTANTE */}
                 <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-md shadow-inner mb-4">
                   <p className="text-yellow-800 text-xs sm:text-sm font-medium">
-                    <span className="inline-block mr-1 align-middle">
-                      ⚠️
-                    </span>
+                    <span className="inline-block mr-1 align-middle">⚠️</span>
                     <strong className="font-bold">AVISO:</strong> Tienes{" "}
-                    <span className="font-semibold text-red-600">30 minutos</span> para enviarle el comprobante de la seña o, si es en efectivo, coordinar el pago. De lo contrario, la solicitud se cancelará automáticamente.
+                    <span className="font-semibold text-red-600">
+                      30 minutos
+                    </span>{" "}
+                    para enviarle el comprobante de la seña o, si es en
+                    efectivo, coordinar el pago. De lo contrario, la solicitud
+                    se cancelará automáticamente.
                   </p>
                 </div>
               </div>
@@ -389,10 +392,11 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
                 <button
                   onClick={reservarTurno}
                   disabled={isLoading}
-                  className={`flex-1 py-2 sm:py-3 px-4 rounded-lg font-medium text-white transition-all flex items-center justify-center gap-2 active:scale-95 ${isLoading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-md"
-                    } text-sm`}
+                  className={`flex-1 py-2 sm:py-3 px-4 rounded-lg font-medium text-white transition-all flex items-center justify-center gap-2 active:scale-95 ${
+                    isLoading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 shadow-md"
+                  } text-sm`}
                 >
                   {isLoading ? (
                     <>
@@ -457,7 +461,6 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
 
               {/* Mensaje principal */}
               <p className="text-gray-600 px-6 mb-6 text-center">
-
                 Te derivamos con el propietario de la cancha.
               </p>
             </div>

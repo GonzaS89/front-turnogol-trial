@@ -4,7 +4,7 @@ import { useObtenerTurnosxCancha } from "../../customHooks/useObtenerTurnosxCanc
 import { FaFutbol, FaArrowLeft } from "react-icons/fa";
 import { Turno } from "./components/Turno";
 import { useMemo, useState, useEffect } from "react";
-import { motion } from 'framer-motion'
+import { motion } from "framer-motion";
 
 export default function ReservaDeTurno() {
   const location = useLocation();
@@ -31,28 +31,49 @@ export default function ReservaDeTurno() {
     // La diferencia entre UTC y la hora local del navegador
     const localOffsetMs = now.getTimezoneOffset() * 60 * 1000;
     // Ajustar la hora actual para que sea UTC y luego restarle el offset de Argentina
-    const argentinaTime = new Date(now.getTime() + localOffsetMs + argentinaOffsetMs);
-    
+    const argentinaTime = new Date(
+      now.getTime() + localOffsetMs + argentinaOffsetMs
+    );
+
     // Obtener la fecha en formato YYYY-MM-DD (al inicio del día)
-    return new Date(argentinaTime.getFullYear(), argentinaTime.getMonth(), argentinaTime.getDate());
+    return new Date(
+      argentinaTime.getFullYear(),
+      argentinaTime.getMonth(),
+      argentinaTime.getDate()
+    );
   };
 
   // Compara solo la parte de la fecha (día, mes, año)
   const isSameDay = (date1, date2) => {
-    return date1.getFullYear() === date2.getFullYear() &&
-           date1.getMonth() === date2.getMonth() &&
-           date1.getDate() === date2.getDate();
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
   };
 
   // Función para obtener el día de la semana y la fecha formateada por separado
   const getFormattedDateParts = (fechaStr) => {
-    const dateObj = new Date(fechaStr + 'T00:00:00'); // Asegura que se parsea como UTC para evitar problemas de TZ
-    
+    const dateObj = new Date(fechaStr + "T00:00:00"); // Asegura que se parsea como UTC para evitar problemas de TZ
+
     const dias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-    const mesesAbreviados = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const mesesAbreviados = [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic",
+    ];
 
     const dayOfWeek = dias[dateObj.getDay()];
-    const formattedDay = String(dateObj.getDate()).padStart(2, '0');
+    const formattedDay = String(dateObj.getDate()).padStart(2, "0");
     const formattedMonth = mesesAbreviados[dateObj.getMonth()];
 
     return { dayOfWeek, formattedDay, formattedMonth };
@@ -70,10 +91,14 @@ export default function ReservaDeTurno() {
     turnos.forEach((turno) => {
       if (!turno.fecha) return;
 
-      const fechaTurno = new Date(turno.fecha.split("T")[0] + 'T00:00:00'); // Asegura que la fecha sea al inicio del día en UTC
+      const fechaTurno = new Date(turno.fecha.split("T")[0] + "T00:00:00"); // Asegura que la fecha sea al inicio del día en UTC
 
       // Solo incluir turnos cuya fecha sea hoy o en el futuro
-      if (fechaTurno.getTime() >= todayInArgentina.getTime() - (24 * 60 * 60 * 1000)) { // Ajuste para incluir el día actual correctamente
+      if (
+        fechaTurno.getTime() >=
+        todayInArgentina.getTime() - 24 * 60 * 60 * 1000
+      ) {
+        // Ajuste para incluir el día actual correctamente
         const fechaStr = turno.fecha.split("T")[0]; // Mantener formato YYYY-MM-DD para la clave
         if (!agrupados[fechaStr]) {
           agrupados[fechaStr] = [];
@@ -105,80 +130,96 @@ export default function ReservaDeTurno() {
 
   // Filtrar y ordenar turnos por hora según la fecha seleccionada
   const turnosFiltrados = fechaSeleccionada
-    ? [...(turnos?.filter((turno) => turno.fecha?.startsWith(fechaSeleccionada)) || [])]
-      .sort((a, b) => convertirHoraAMinutos(a.hora) - convertirHoraAMinutos(b.hora))
+    ? [
+        ...(turnos?.filter((turno) =>
+          turno.fecha?.startsWith(fechaSeleccionada)
+        ) || []),
+      ].sort(
+        (a, b) => convertirHoraAMinutos(a.hora) - convertirHoraAMinutos(b.hora)
+      )
     : [];
 
   return (
-    <div className="w-full min-h-screen flex flex-col font-sans bg-gray-900">
+    <div className="w-full min-h-screen flex flex-col font-sans">
       {/* Header con imagen de portada y superposición de información */}
       <div className="relative h-44 sm:h-56 md:h-64 lg:h-72 xl:h-80 w-full overflow-hidden">
-  {/* Imagen de portada */}
-  {cancha?.portada ? (
-    <img
-      src={cancha.portada}
-      alt={`Portada de ${cancha.nombre}`}
-      className="w-full h-full object-cover"
-    />
-  ) : (
-    <div className="w-full h-full bg-gradient-to-r from-green-700 to-emerald-900 animate-pulse"></div>
-  )}
+        {/* Imagen de portada */}
+        {cancha?.portada ? (
+          <img
+            src={cancha.portada}
+            alt={`Portada de ${cancha.nombre}`}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-r from-green-700 to-emerald-900 animate-pulse"></div>
+        )}
 
-  {/* Overlay sutil */}
-  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent backdrop-brightness-50 backdrop-blur-md"></div>
+        {/* Overlay sutil */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent backdrop-brightness-50 backdrop-blur-"></div>
 
-  {/* Loader mientras carga */}
-  {loadingCancha && (
-    <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20">
-      <div className="w-16 h-16 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  )}
+        {/* Loader mientras carga */}
+        {loadingCancha && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20">
+            <div className="w-16 h-16 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
 
-  {/* Información de la cancha superpuesta */}
-  {!loadingCancha && (
-    <div className="absolute inset-0 flex items-center justify-start px-4 sm:px-6 lg:px-8 pb-4 sm:pb-0 z-10">
-      {" "}
-      {/* Botón de volver al panel - similar a VerTurnos */}
-      
-      {/* Contenido de la información de la cancha (logo + detalles) */}
-      <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 w-full xl:w-[1200px] xl:mx-auto">
-        {/* Logo circular */}
-        <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-full border-3 border-white shadow-xl overflow-hidden flex-shrink-0">
-          {cancha?.logo ? (
-            <img
-              src={cancha.logo}
-              alt={`Logo de ${cancha.nombre}`}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-emerald-600 flex items-center justify-center">
-              <FaFutbol className="text-white text-3xl sm:text-4xl lg:text-5xl" />
+        {/* Información de la cancha superpuesta */}
+        {!loadingCancha && (
+          <div className="absolute inset-0 flex items-center justify-start px-4 sm:px-6 lg:px-8 pb-4 sm:pb-0 z-10">
+            {" "}
+            {/* Botón de volver al panel - similar a VerTurnos */}
+            {/* Contenido de la información de la cancha (logo + detalles) */}
+            <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 w-full xl:w-[1200px] xl:mx-auto">
+              {/* Logo circular */}
+              <div
+                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-full border-3 border-white shadow-xl overflow-hidden flex-shrink-0
+              transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
+              >
+                {cancha?.logo ? (
+                  <img
+                    src={cancha.logo}
+                    alt={`Logo de ${cancha.nombre}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                    <FaFutbol className="text-white text-3xl sm:text-4xl lg:text-5xl drop-shadow-md" />
+                  </div>
+                )}
+              </div>
+              {/* Información de la cancha (nombre, dirección, precios) */}
+              <div
+                className="flex flex-col justify-center
+              text-white p-4 sm:p-5 md:p-6 rounded-2xl
+              max-w-sm sm:max-w-md lg:max-w-lg shadow-2xl
+              transform transition-all duration-300 hover:scale-[1.01]"
+              >
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold capitalize tracking-wide leading-tight text-shadow-lg">
+                  {cancha?.nombre || "Cancha"}
+                </h2>
+                <p className="text-sm sm:text-base lg:text-lg text-white/90 mt-1 flex items-center gap-2">
+                  <span className="text-emerald-300 text-lg">📍</span>
+                  {cancha?.direccion ? `${cancha.direccion} - ` : ""}
+                  <span className="font-semibold">
+                    {cancha?.localidad || "Localidad no disponible"}
+                  </span>
+                </p>
+                <p className="text-xs sm:text-sm lg:text-base text-emerald-200 mt-1 flex items-center gap-2">
+                  <span className="text-emerald-300 text-base">💰</span>
+                  <span className="font-semibold">
+                    Precios por turno: ${Math.trunc(cancha?.tarifa1 || 0)} - $
+                    {Math.trunc(cancha?.tarifa2 || 0)}
+                  </span>
+                </p>
+              </div>
             </div>
-          )}
-        </div>
-        {/* Información de la cancha (nombre, dirección, precios) */}
-        <div className="text-white drop-shadow-lg bg-black/40 backdrop-blur-sm p-3 sm:p-4 md:p-5 rounded-xl max-w-sm sm:max-w-md lg:max-w-lg">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold capitalize tracking-wide leading-tight">
-            {cancha?.nombre || "Cancha"}
-          </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-white/90 mt-1 flex items-center gap-2">
-            <span className="text-emerald-300 text-lg">📍</span>
-            {cancha?.direccion ? `${cancha.direccion} - ` : ""}
-            {cancha?.localidad || "Localidad no disponible"}
-          </p>
-          <p className="text-xs sm:text-sm lg:text-base text-emerald-200 mt-1 flex items-center gap-2">
-            <span className="text-emerald-300 text-base">💰</span>
-            Precios por turno: ${Math.trunc(cancha?.tarifa1 || 0)} - $
-            {Math.trunc(cancha?.tarifa2 || 0)}
-          </p>
-        </div>
+          </div>
+        )}
       </div>
-    </div>
-  )}
-</div>
 
       {/* Contenido principal de la reserva (selector de fechas y turnos) */}
-      <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 py-6 bg-white shadow-inner -mt-4 sm:-mt-6 rounded-t-3xl relative z-20">
+      <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 py-6 shadow-inner -mt-4 sm:-mt-6 rounded-t-3xl relative z-20">
         <header className="mb-6 sm:mb-8 text-center w-full">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-800 bg-clip-text text-transparent">
             Elegí tu Turno
@@ -195,7 +236,9 @@ export default function ReservaDeTurno() {
           {/* Botones de navegación del carrusel */}
           <button
             onClick={() =>
-              document.getElementById("carrusel-fechas").scrollBy({ left: -150, behavior: "smooth" })
+              document
+                .getElementById("carrusel-fechas")
+                .scrollBy({ left: -150, behavior: "smooth" })
             }
             className="absolute -left-2 sm:-left-4 top-1/2 transform -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-emerald-700 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white active:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             aria-label="Anterior fecha"
@@ -218,10 +261,11 @@ export default function ReservaDeTurno() {
             ) : (
               turnosAgrupadosPorFecha.map(({ fecha }, index) => {
                 const todayInArgentina = getTodayInArgentina();
-                const currentCardDate = new Date(fecha + 'T00:00:00'); // Fecha de la tarjeta
+                const currentCardDate = new Date(fecha + "T00:00:00"); // Fecha de la tarjeta
                 const isToday = isSameDay(currentCardDate, todayInArgentina);
 
-                const { dayOfWeek, formattedDay, formattedMonth } = getFormattedDateParts(fecha);
+                const { dayOfWeek, formattedDay, formattedMonth } =
+                  getFormattedDateParts(fecha);
 
                 return (
                   <div
@@ -229,15 +273,25 @@ export default function ReservaDeTurno() {
                     onClick={() => {
                       setFechaSeleccionada(fecha);
                       // Opcional: Desplazar la fecha seleccionada al centro si está fuera de vista
-                      const targetElement = document.getElementById(`date-card-${fecha}`);
-                      const carouselContainer = document.getElementById("carrusel-fechas");
+                      const targetElement = document.getElementById(
+                        `date-card-${fecha}`
+                      );
+                      const carouselContainer =
+                        document.getElementById("carrusel-fechas");
                       if (carouselContainer && targetElement) {
-                        const containerRect = carouselContainer.getBoundingClientRect();
-                        const elementRect = targetElement.getBoundingClientRect();
-                        const scrollPosition = elementRect.left - containerRect.left + carouselContainer.scrollLeft - (containerRect.width / 2) + (elementRect.width / 2);
+                        const containerRect =
+                          carouselContainer.getBoundingClientRect();
+                        const elementRect =
+                          targetElement.getBoundingClientRect();
+                        const scrollPosition =
+                          elementRect.left -
+                          containerRect.left +
+                          carouselContainer.scrollLeft -
+                          containerRect.width / 2 +
+                          elementRect.width / 2;
                         carouselContainer.scrollTo({
                           left: scrollPosition,
-                          behavior: 'smooth'
+                          behavior: "smooth",
                         });
                       }
                     }}
@@ -247,20 +301,43 @@ export default function ReservaDeTurno() {
                       px-4 py-3 sm:px-5 sm:py-4 rounded-xl cursor-pointer 
                       transition-all duration-300 transform active:scale-95
                       text-center flex flex-col justify-center items-center
-                      ${fechaSeleccionada === fecha
-                        ? "bg-gradient-to-br from-emerald-600 to-green-700 text-white shadow-lg shadow-emerald-400/50 scale-105 ring-2 ring-emerald-300"
-                        : "bg-white border border-gray-200 text-gray-800 hover:bg-emerald-50 hover:shadow-md"
+                      ${
+                        fechaSeleccionada === fecha
+                          ? "bg-gradient-to-br from-emerald-600 to-green-700 text-white shadow-lg shadow-emerald-400/50 scale-105 ring-2 ring-emerald-300"
+                          : "bg-white border border-gray-200 text-gray-800 hover:bg-emerald-50 hover:shadow-md"
                       }
-                      ${isToday && fechaSeleccionada !== fecha ? "ring-2 ring-emerald-500 ring-offset-2 ring-offset-white" : ""}
+                      ${
+                        isToday && fechaSeleccionada !== fecha
+                          ? "ring-2 ring-emerald-500 ring-offset-2 ring-offset-white"
+                          : ""
+                      }
                     `}
                   >
-                    <p className={`text-sm font-semibold uppercase tracking-wide ${fechaSeleccionada === fecha ? "text-white" : "text-emerald-600"}`}>
+                    <p
+                      className={`text-sm font-semibold uppercase tracking-wide ${
+                        fechaSeleccionada === fecha
+                          ? "text-white"
+                          : "text-emerald-600"
+                      }`}
+                    >
                       {isToday ? "Hoy" : dayOfWeek}
                     </p>
-                    <p className={`font-extrabold text-3xl sm:text-4xl ${fechaSeleccionada === fecha ? "text-white" : "text-gray-900"}`}>
+                    <p
+                      className={`font-extrabold text-3xl sm:text-4xl ${
+                        fechaSeleccionada === fecha
+                          ? "text-white"
+                          : "text-gray-900"
+                      }`}
+                    >
                       {formattedDay}
                     </p>
-                    <p className={`text-sm mt-1 ${fechaSeleccionada === fecha ? "text-white/90" : "text-emerald-500"}`}>
+                    <p
+                      className={`text-sm mt-1 ${
+                        fechaSeleccionada === fecha
+                          ? "text-white/90"
+                          : "text-emerald-500"
+                      }`}
+                    >
                       {formattedMonth}.
                     </p>
                   </div>
@@ -271,7 +348,9 @@ export default function ReservaDeTurno() {
 
           <button
             onClick={() =>
-              document.getElementById("carrusel-fechas").scrollBy({ left: 150, behavior: "smooth" })
+              document
+                .getElementById("carrusel-fechas")
+                .scrollBy({ left: 150, behavior: "smooth" })
             }
             className="absolute -right-2 sm:-right-4 top-1/2 transform -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-emerald-700 bg-white/80 backdrop-blur-md shadow-lg hover:bg-white active:bg-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             aria-label="Siguiente fecha"

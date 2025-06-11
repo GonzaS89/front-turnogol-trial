@@ -33,7 +33,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="gap-8 bg-gradient-to-br from-green-100 via-emerald-50 to-green-500 min-h-screen flex flex-col items-center justify-around relative">
+      <div class="bg-gradient-to-br from-green-50 via-emerald-100 to-emerald-200 min-h-screen flex flex-col items-center justify-around relative">
+  
 
         <Routes>
           {/* Pantalla inicial */}

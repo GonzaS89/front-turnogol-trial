@@ -10,13 +10,14 @@ import logo from "/logo.png"; // Puedes dejarlo aquí o quitarlo si no se usa di
 export default function Canchas() {
   const { datos: canchas, isLoading, error } = useCanchas();
   const [searchTerm, setSearchTerm] = useState("");
-  const [showResults, setShowResults] = useState(false);
+  // No necesitamos showResults si siempre queremos mostrar las canchas
+  // const [showResults, setShowResults] = useState(false);
   const { turnos } = useObtenerTodosLosTurnos();
 
-  // Mostrar resultados solo si hay texto en el input
-  useEffect(() => {
-    setShowResults(searchTerm.trim() !== "");
-  }, [searchTerm]);
+  // Elimina este useEffect, ya que siempre queremos mostrar las canchas
+  // useEffect(() => {
+  //   setShowResults(searchTerm.trim() !== "");
+  // }, [searchTerm]);
 
   // Contar turnos libres para hoy
   const turnosLibres = (id) =>
@@ -46,7 +47,8 @@ export default function Canchas() {
     canchas?.filter((cancha) => {
       const term = searchTerm.toLowerCase().trim();
 
-      if (!term) return false;
+      // Si no hay término de búsqueda, muestra todas las canchas
+      if (!term) return true;
 
       return (
         cancha.nombre.toLowerCase().includes(term) ||
@@ -57,7 +59,7 @@ export default function Canchas() {
 
   return (
     // Contenedor principal: ocupa toda la pantalla, con un degradado de fondo y flexbox para centrar el contenido
-    <section className="w-full min-h-screen flex flex-col items-center py-6 px-2 sm:px-4 bg-gradient-to-b from-emerald-50 via-white to-emerald-50">
+    <section className="w-full min-h-screen flex flex-col items-center py-6 px-2 sm:px-4 ">
       {/* Contenido centrado y con ancho máximo */}
       <div className="w-full max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto flex flex-col items-center px-3 sm:px-5">
         {/* Header de la página */}
@@ -100,8 +102,8 @@ export default function Canchas() {
 
         {/* Zona de resultados y mensajes */}
         <div className="w-full mt-8">
-          {/* Mensaje inicial sin búsqueda */}
-          {!showResults && (
+          {/* Eliminado el mensaje inicial sin búsqueda, ahora siempre mostramos canchas */}
+          {/* {!showResults && (
             <div className="flex flex-col items-center justify-center gap-4 p-8 bg-white/70 backdrop-blur-sm rounded-xl shadow-md text-center max-w-md mx-auto">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +126,7 @@ export default function Canchas() {
                 Escribe el nombre, localidad o provincia de la cancha que buscas.
               </p>
             </div>
-          )}
+          )} */}
 
           {/* Indicador de carga */}
           {isLoading && (
@@ -145,10 +147,11 @@ export default function Canchas() {
             </div>
           )}
 
-          {/* Resultados de búsqueda */}
-          {!isLoading && !error && showResults && (
+          {/* Resultados de búsqueda (o todas las canchas si no hay búsqueda) */}
+          {!isLoading && !error && (
             <>
-              {filteredCanchas.length === 0 ? (
+              {filteredCanchas.length === 0 && searchTerm.trim() !== "" ? (
+                // Muestra este mensaje solo si hay un término de búsqueda y no hay resultados
                 <div className="flex flex-col items-center justify-center gap-5 p-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg text-center max-w-sm mx-auto transform transition-all hover:shadow-xl duration-300">
                   {/* Icono con efecto */}
                   <div className="p-3 rounded-full bg-emerald-100 text-emerald-500 transition-transform duration-300 group-hover:rotate-12">
