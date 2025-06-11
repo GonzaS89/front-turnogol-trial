@@ -77,7 +77,7 @@ export default function MiCuenta() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="min-h-screen w-screen bg-gradient-to-br from-emerald-50 to-white flex flex-col items-center p-4 sm:p-6 lg:p-8"
+      className="min-h-screen w-screen flex flex-col items-center p-4 sm:p-6 lg:p-8"
     >
       <button
             onClick={() => navigate(-1)}

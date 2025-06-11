@@ -8,66 +8,75 @@ import {
   FaTimes,
   FaArrowLeft,
   FaClock,
-  FaCalendarAlt, // Agregado para el icono de fecha
+  FaCalendarAlt,
 } from "react-icons/fa";
 import dayjs from "dayjs";
+import 'dayjs/locale/es';
+dayjs.locale('es');
 
 export default function AgregarTurno() {
   const navigate = useNavigate();
   const location = useLocation();
   const cancha = location.state?.cancha;
 
-  const [horarios, setHorarios] = useState([""]); // Horarios a agregar
-  const [showModalSuccess, setShowModalSuccess] = useState(false); // Modal de éxito
-  const [showModalConfirm, setShowModalConfirm] = useState(false); // Modal de confirmación
-  const [isLoading, setIsLoading] = useState(false); // Estado de carga general (fetch y submit)
-  const [horariosExistentes, setHorariosExistentes] = useState([]); // Turnos ya existentes para la fecha
+  const [horarios, setHorarios] = useState([""]);
+  const [showModalSuccess, setShowModalSuccess] = useState(false);
+  const [showModalConfirm, setShowModalConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [horariosExistentes, setHorariosExistentes] = useState([]);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(() => {
-    return dayjs().format("YYYY-MM-DD"); // Fecha inicial: hoy
+    return dayjs().format("YYYY-MM-DD");
   });
-  const [loadingExisting, setLoadingExisting] = useState(true); // Carga específica de horarios existentes
+  const [loadingExisting, setLoadingExisting] = useState(true);
 
   // --- Efectos y Lógica de Datos ---
 
-  // Obtener turnos existentes para la cancha y fecha seleccionada
   useEffect(() => {
     const obtenerHorariosExistentes = async () => {
       if (!cancha?.id || !fechaSeleccionada) {
-        setHorariosExistentes([]); // Limpiar si no hay ID o fecha
+        setHorariosExistentes([]);
         setLoadingExisting(false);
         return;
       }
 
       try {
         setLoadingExisting(true);
-        // Ajuste para obtener turnos de UNA cancha (asumiendo endpoint filtra por ID)
         const { data } = await axios.get(
           `https://turnogol.site/api-pruebas/turnos_canchas/canchas`,
           { params: { id: cancha?.id } }
         );
 
-        // Filtrar y ordenar por la fecha seleccionada
         const turnosDeFecha = data
           .filter((turno) => dayjs(turno.fecha).isSame(fechaSeleccionada, 'day'))
-          .sort((a, b) => a.hora.localeCompare(b.hora));
+          .sort((a, b) => {
+            // Lógica de ordenación: 00:00 se trata como 24:00 para que vaya al final
+            const horaA = a.hora === "00:00" ? "24:00" : a.hora.slice(0, 5); // Usa slice(0,5) aquí si el formato es HH:mm:ss
+            const horaB = b.hora === "00:00" ? "24:00" : b.hora.slice(0, 5); // Usa slice(0,5) aquí si el formato es HH:mm:ss
+            return horaA.localeCompare(horaB);
+          });
 
         setHorariosExistentes(turnosDeFecha);
       } catch (error) {
         console.error("Error al obtener horarios existentes:", error);
-        setHorariosExistentes([]); // En caso de error, limpiar
+        setHorariosExistentes([]);
       } finally {
         setLoadingExisting(false);
       }
     };
     obtenerHorariosExistentes();
-  }, [cancha?.id, fechaSeleccionada]); // Dependencias para recargar: ID de cancha y fecha seleccionada
+  }, [cancha?.id, fechaSeleccionada]);
+
+  useEffect(() => {
+    setHorarios([""]);
+  }, [fechaSeleccionada]);
+
 
   // --- Manejo de Horarios del Formulario ---
 
   const handleHorarioChange = (index, value) => {
     const nuevosHorarios = [...horarios];
     nuevosHorarios[index] = value;
-    setHorarios(nuearios);
+    setHorarios(nuevosHorarios);
   };
 
   const agregarCampo = () => setHorarios([...horarios, ""]);
@@ -75,28 +84,36 @@ export default function AgregarTurno() {
   const eliminarCampo = (index) => {
     const nuevosHorarios = horarios.filter((_, i) => i !== index);
     setHorarios(nuevosHorarios);
+    if (nuevosHorarios.length === 0) {
+      setHorarios([""]);
+    }
   };
 
   const precioDeTurno = (horaIngresada) => {
     const hora = parseInt(horaIngresada.split(":")[0], 10);
-    const cambioTarifa = cancha?.cambio_de_tarifa !== undefined ? parseInt(cancha.cambio_de_tarifa, 10) : 20; // Default a 20 hs
+    const cambioTarifa = cancha?.cambio_de_tarifa !== undefined ? parseInt(cancha.cambio_de_tarifa, 10) : 20;
 
     return hora >= cambioTarifa || hora === 0
-      ? cancha?.tarifa2 || 0 // Asegurar un valor por defecto si no existe
-      : cancha?.tarifa1 || 0; // Asegurar un valor por defecto si no existe
+      ? cancha?.tarifa2 || 0
+      : cancha?.tarifa1 || 0;
   };
 
   // --- Enviar Turnos ---
 
   const handleSubmit = async () => {
-    if (horarios.some((h) => !h) || !fechaSeleccionada) return; // Validar antes de enviar
+    const horariosValidos = horarios.filter(h => h.trim() !== '');
+
+    if (horariosValidos.length === 0 || !fechaSeleccionada) {
+      alert("Por favor, ingresa al menos un horario y selecciona una fecha.");
+      return;
+    }
 
     try {
       setIsLoading(true);
       await Promise.all(
-        horarios.map((hora) =>
+        horariosValidos.map((hora) =>
           axios.post(`https://turnogol.site/api-pruebas/turnos_canchas`, {
-            hora,
+            hora: hora, // Se envía 00:00 si el usuario lo ingresó así
             cancha_id: cancha.id,
             estado: "disponible",
             precio: precioDeTurno(hora),
@@ -104,45 +121,47 @@ export default function AgregarTurno() {
           })
         )
       );
-      setShowModalConfirm(false); // Cierra el modal de confirmación
-      setShowModalSuccess(true); // Muestra el modal de éxito
+      setShowModalConfirm(false);
+      setShowModalSuccess(true);
+      setHorarios([""]);
 
-      setHorarios([""]); // Resetea los campos del formulario
-      // Forzar una recarga de los turnos existentes para mostrar los recién agregados
-      // Esto se logrará automáticamente gracias al useEffect que depende de fechaSeleccionada
-      // Para asegurar la recarga visual, podrías refetchear o resetear un estado que dispare el useEffect
-      // Por ahora, dayjs().format("YYYY-MM-DD") ya fuerza un cambio si la fecha no era hoy
-      
-      // Volver al panel después del éxito
-      setTimeout(() => navigate(-1), 1500); 
-
+      setTimeout(() => navigate(-1), 2000);
     } catch (error) {
       console.error("Error al agregar turnos:", error);
-      alert("Error al guardar los turnos. Por favor, intente de nuevo."); // Considerar un modal de error aquí
+      alert("Error al guardar los turnos. Por favor, intente de nuevo.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  if (!cancha) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-white p-4">
+            <p className="text-xl text-gray-700 font-medium animate-pulse">
+                Cargando información de la cancha o datos no disponibles...
+            </p>
+        </div>
+    );
+  }
+
   return (
-    <section className="min-h-screen w-full py-8 px-4 sm:px-6 lg:px-8 flex justify-center items-center bg-gray-100 font-sans text-gray-800">
-      <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-600 hover:text-emerald-700 transition-colors px-3 py-2 rounded-lg text-lg mb-4 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-emerald-500 absolute top-0 mt-2"
-          >
-            <FaArrowLeft className="text-xl" />
-            <span className="font-medium">Volver al Panel</span>
-          </button>
-      <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-4xl w-full border border-gray-200">
-        
+    <section className="min-h-screen w-full py-8 px-4 sm:px-6 lg:px-8 flex justify-center items-center font-sans text-gray-800 bg-gradient-to-br from-emerald-50 via-white to-emerald-50">
+      {/* Tarjeta principal del formulario */}
+      <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-4xl w-full border border-gray-200 relative">
+        {/* Botón de volver */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-2 text-gray-600 hover:text-emerald-700 transition-colors px-3 py-2 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 z-10"
+        >
+          <FaArrowLeft className="text-xl sm:text-2xl" />
+          <span className="font-medium hidden sm:inline">Volver al Panel</span>
+        </button>
+
         {/* Header Principal */}
         <header className="flex flex-col sm:flex-row items-center justify-between mb-8 relative">
-          {/* Botón de volver */}
-          
-          
           {/* Título principal y nombre de la cancha */}
           <div className="text-center w-full flex-1">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-emerald-600">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-emerald-600 mt-4 sm:mt-0">
               Agregar Turnos
             </h2>
             <p className="text-sm sm:text-base lg:text-lg text-gray-600 mt-1">
@@ -176,7 +195,7 @@ export default function AgregarTurno() {
             </div>
 
             {/* Horarios existentes */}
-            <div className="p-5 bg-gray-50 rounded-lg border border-gray-200 shadow-inner flex-1"> {/* flex-1 para que ocupe espacio */}
+            <div className="p-5 bg-gray-50 rounded-lg border border-gray-200 shadow-inner flex-1">
               <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-3 flex items-center gap-2">
                 <FaClock className="text-emerald-500 text-xl" />{" "}
                 <span>
@@ -194,7 +213,8 @@ export default function AgregarTurno() {
                       key={turno.id}
                       className="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-full text-sm sm:text-base font-medium whitespace-nowrap shadow-sm"
                     >
-                      {turno.hora.slice(0, 5)} hs
+                      {/* Lógica de visualización: si la hora es "00:00", mostrar "24:00" */}
+                      {turno.hora.slice(0, 5) === "00:00" ? "24:00" : turno.hora.slice(0, 5)} hs
                     </span>
                   ))}
                 </div>
@@ -208,7 +228,7 @@ export default function AgregarTurno() {
 
           {/* Columna Derecha (Formulario para Agregar Nuevos Horarios) */}
           <div className="flex flex-col gap-6">
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 mt-4 lg:mt-0"> {/* Adjusted margin for large screens */}
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 mt-4 lg:mt-0">
               Añadir Nuevos Horarios
             </h3>
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
@@ -269,13 +289,13 @@ export default function AgregarTurno() {
       {/* Modal Confirmación */}
       <AnimatePresence>
         {showModalConfirm && (
-          <div
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           >
-            <div
+            <motion.div
               initial={{ scale: 0.9, y: 50 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 50 }}
@@ -295,7 +315,8 @@ export default function AgregarTurno() {
                 <div className="flex flex-wrap justify-center gap-2">
                   {horarios.map((hora, i) => (
                     <span key={i} className="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-full text-sm sm:text-base font-medium">
-                      {hora} hs
+                      {/* Lógica de visualización en el modal: si la hora es "00:00", mostrar "24:00" */}
+                      {hora === "00:00" ? "24:00" : hora} hs
                     </span>
                   ))}
                 </div>
@@ -340,21 +361,21 @@ export default function AgregarTurno() {
                   )}
                 </button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
       {/* Modal Éxito */}
       <AnimatePresence>
         {showModalSuccess && (
-          <div
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
           >
-            <div
+            <motion.div
               initial={{ scale: 0.9, y: 50 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 50 }}
@@ -370,15 +391,15 @@ export default function AgregarTurno() {
               </p>
               {/* Barra de progreso visual */}
               <div className="h-2 bg-emerald-100 rounded-full overflow-hidden">
-                <div
+                <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
                   transition={{ duration: 1.5 }}
                   className="h-full bg-emerald-500"
                 />
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>

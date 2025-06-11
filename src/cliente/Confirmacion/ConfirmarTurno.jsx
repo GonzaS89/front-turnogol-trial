@@ -97,7 +97,6 @@ export default function ConfirmarTurno() {
       // Actualizamos los datos del turno
       await axios.put(`https://turnogol.site/api-pruebas/turnos/${idTurno}`, {
         nombre: formData.nombre,
-        telefono: formData.telefono,
         dni: formData.dni,
         metodoPago: formData.metodoPago,
       });
@@ -168,6 +167,23 @@ Preferí abonar en efectivo. Me pongo a disposición para coordinar lugar y hora
       transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
       className="min-h-screen w-full flex flex-col items-center justify-center"
     >
+      <div className="absolute inset-0 z-0 opacity-10">
+        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none">
+          <circle cx="25" cy="25" r="10" fill="url(#gradientCircle)" opacity="0.6"/>
+          <circle cx="75" cy="75" r="15" fill="url(#gradientCircle)" opacity="0.6"/>
+          <path d="M0 50 L20 70 L50 40 L80 60 L100 40 V0 H0 Z" fill="url(#gradientPath)" opacity="0.3"/>
+          <defs>
+            <radialGradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" stopColor="#34D399" /> {/* green-400 */}
+              <stop offset="100%" stopColor="#059669" /> {/* emerald-600 */}
+            </radialGradient>
+            <linearGradient id="gradientPath" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10B981" /> {/* emerald-500 */}
+              <stop offset="100%" stopColor="#065F46" /> {/* green-900 */}
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
       {cancha && turno && (
         <div
           initial={{ y: 20, opacity: 0 }}

@@ -82,6 +82,7 @@ export default function PanelCancha() {
       transition={{ duration: 0.6 }}
       className="min-h-screen w-full flex flex-col items-center justify-start bg-gradient-to-br from-emerald-50 to-green-100 font-sans p-4 sm:p-6 lg:p-8"
     >
+      
       {/* Botón de cerrar sesión */}
       <div className="w-full max-w-5xl flex justify-end mb-6 sm:mb-8">
         <button

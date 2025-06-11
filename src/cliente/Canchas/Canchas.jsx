@@ -60,11 +60,28 @@ export default function Canchas() {
   return (
     // Contenedor principal: ocupa toda la pantalla, con un degradado de fondo y flexbox para centrar el contenido
     <section className="w-full min-h-screen flex flex-col items-center py-6 px-2 sm:px-4 ">
+      <div className="absolute inset-0 z-0 opacity-10">
+        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none">
+          <circle cx="25" cy="25" r="10" fill="url(#gradientCircle)" opacity="0.6"/>
+          <circle cx="75" cy="75" r="15" fill="url(#gradientCircle)" opacity="0.6"/>
+          <path d="M0 50 L20 70 L50 40 L80 60 L100 40 V0 H0 Z" fill="url(#gradientPath)" opacity="0.3"/>
+          <defs>
+            <radialGradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" stopColor="#34D399" /> {/* green-400 */}
+              <stop offset="100%" stopColor="#059669" /> {/* emerald-600 */}
+            </radialGradient>
+            <linearGradient id="gradientPath" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10B981" /> {/* emerald-500 */}
+              <stop offset="100%" stopColor="#065F46" /> {/* green-900 */}
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
       {/* Contenido centrado y con ancho máximo */}
       <div className="w-full max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto flex flex-col items-center px-3 sm:px-5">
         {/* Header de la página */}
         <header className="mb-8 sm:mb-10 text-center w-full">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-emerald-600">
             ¿Listo para jugar?
           </h1>
           <p className="mt-2 text-base sm:text-lg text-gray-600 max-w-md mx-auto">

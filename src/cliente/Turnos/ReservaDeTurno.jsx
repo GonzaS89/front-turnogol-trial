@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useCanchas } from "../../customHooks/useCanchas";
 import { useObtenerTurnosxCancha } from "../../customHooks/useObtenerTurnosxCancha";
 import { FaFutbol, FaArrowLeft } from "react-icons/fa";
@@ -12,6 +12,7 @@ export default function ReservaDeTurno() {
   const { idCancha: canchaId } = location.state || {};
   const { datos: canchas, isLoading: loadingCancha } = useCanchas();
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
+  const navigate = useNavigate();
 
   const cancha = useMemo(() => {
     return canchas?.find(
@@ -58,18 +59,8 @@ export default function ReservaDeTurno() {
 
     const dias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
     const mesesAbreviados = [
-      "Ene",
-      "Feb",
-      "Mar",
-      "Abr",
-      "May",
-      "Jun",
-      "Jul",
-      "Ago",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dic",
+      "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+      "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
     ];
 
     const dayOfWeek = dias[dateObj.getDay()];
@@ -93,12 +84,8 @@ export default function ReservaDeTurno() {
 
       const fechaTurno = new Date(turno.fecha.split("T")[0] + "T00:00:00"); // Asegura que la fecha sea al inicio del día en UTC
 
-      // Solo incluir turnos cuya fecha sea hoy o en el futuro
-      if (
-        fechaTurno.getTime() >=
-        todayInArgentina.getTime() - 24 * 60 * 60 * 1000
-      ) {
-        // Ajuste para incluir el día actual correctamente
+      // CAMBIO CLAVE AQUÍ: Solo incluir turnos cuya fecha sea hoy o en el futuro
+      if (fechaTurno.getTime() >= todayInArgentina.getTime()) { // Eliminamos la resta de 24 horas
         const fechaStr = turno.fecha.split("T")[0]; // Mantener formato YYYY-MM-DD para la clave
         if (!agrupados[fechaStr]) {
           agrupados[fechaStr] = [];
@@ -123,24 +110,46 @@ export default function ReservaDeTurno() {
   }, [turnosAgrupadosPorFecha, fechaSeleccionada]);
 
   // Función para convertir hora en formato "HH:mm" a minutos totales
-  const convertirHoraAMinutos = (horaStr) => {
-    const [hora, minutos] = horaStr.split(":").map(Number);
-    return hora * 60 + minutos;
-  };
+  // Función para convertir hora en formato "HH:mm" a minutos totales
+const convertirHoraAMinutos = (horaStr) => {
+  const [hora, minutos] = horaStr.split(":").map(Number);
+  // Si 00:00 debe ir al final, lo tratamos como 24*60 minutos
+  // Si no, simplemente sería hora * 60 + minutos
+  const horaNormalizada = (hora === 0 && minutos === 0) ? 24 * 60 : hora * 60 + minutos;
+  return horaNormalizada;
+};
 
-  // Filtrar y ordenar turnos por hora según la fecha seleccionada
-  const turnosFiltrados = fechaSeleccionada
-    ? [
-        ...(turnos?.filter((turno) =>
-          turno.fecha?.startsWith(fechaSeleccionada)
-        ) || []),
-      ].sort(
-        (a, b) => convertirHoraAMinutos(a.hora) - convertirHoraAMinutos(b.hora)
-      )
-    : [];
+// Filtrar y ordenar turnos por hora según la fecha seleccionada
+const turnosFiltrados = fechaSeleccionada
+  ? [
+      ...(turnos?.filter((turno) =>
+        turno.fecha?.startsWith(fechaSeleccionada)
+      ) || []),
+    ].sort(
+      // La función de comparación ya ordena de menor a mayor
+      (a, b) => convertirHoraAMinutos(a.hora) - convertirHoraAMinutos(b.hora)
+    )
+  : [];
 
   return (
     <div className="w-full min-h-screen flex flex-col font-sans">
+      <div className="absolute inset-0 z-0 opacity-10">
+        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none">
+          <circle cx="25" cy="25" r="10" fill="url(#gradientCircle)" opacity="0.6"/>
+          <circle cx="75" cy="75" r="15" fill="url(#gradientCircle)" opacity="0.6"/>
+          <path d="M0 50 L20 70 L50 40 L80 60 L100 40 V0 H0 Z" fill="url(#gradientPath)" opacity="0.3"/>
+          <defs>
+            <radialGradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" stopColor="#34D399" /> {/* green-400 */}
+              <stop offset="100%" stopColor="#059669" /> {/* emerald-600 */}
+            </radialGradient>
+            <linearGradient id="gradientPath" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10B981" /> {/* emerald-500 */}
+              <stop offset="100%" stopColor="#065F46" /> {/* green-900 */}
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
       {/* Header con imagen de portada y superposición de información */}
       <div className="relative h-44 sm:h-56 md:h-64 lg:h-72 xl:h-80 w-full overflow-hidden">
         {/* Imagen de portada */}
@@ -221,7 +230,7 @@ export default function ReservaDeTurno() {
       {/* Contenido principal de la reserva (selector de fechas y turnos) */}
       <div className="flex-1 flex flex-col items-center px-4 sm:px-6 lg:px-8 py-6 shadow-inner -mt-4 sm:-mt-6 rounded-t-3xl relative z-20">
         <header className="mb-6 sm:mb-8 text-center w-full">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-800 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-emerald-600">
             Elegí tu Turno
           </h1>
           {error && (
@@ -232,7 +241,7 @@ export default function ReservaDeTurno() {
         </header>
 
         {/* Carrusel de fechas */}
-        <div className="w-full max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto mb-8 relative px-8">
+        <div className="w-full max-w-4xl lg:max-w-auto mx-auto mb-8 relative px-8">
           {/* Botones de navegación del carrusel */}
           <button
             onClick={() =>
@@ -360,27 +369,28 @@ export default function ReservaDeTurno() {
         </div>
 
         {/* Lista de turnos filtrados por fecha */}
-        <div className="mt-8 w-full px-4 sm:px-6">
-          {turnosFiltrados && turnosFiltrados.length > 0 ? (
-            <div className="grid grid-cols-1 gap-1">
-              {turnosFiltrados.map((turno, i) => (
-                <Turno
-                  key={i}
-                  id={turno.id}
-                  estado={turno.estado}
-                  cancha={turno.cancha_id}
-                  hora={turno.hora}
-                  precio={turno.precio}
-                  fecha={turno.fecha}
-                />
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500 text-center py-8">
-              No hay turnos disponibles para esta fecha.
-            </p>
-          )}
-        </div>
+        <div className="mt-8 w-full lg:max-w-7xl px-4 sm:px-6">
+  {turnosFiltrados && turnosFiltrados.length > 0 ? (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Esto se mapea sobre turnosFiltrados, que ya está ordenado */}
+      {turnosFiltrados.map((turno, i) => (
+        <Turno
+          key={i}
+          id={turno.id}
+          estado={turno.estado}
+          cancha={turno.cancha_id}
+          hora={turno.hora}
+          precio={turno.precio}
+          fecha={turno.fecha}
+        />
+      ))}
+    </div>
+  ) : (
+    <p className="text-gray-500 text-center py-8">
+      No hay turnos disponibles para esta fecha.
+    </p>
+  )}
+</div>
       </div>
     </div>
   );
