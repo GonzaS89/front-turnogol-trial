@@ -369,7 +369,7 @@ const turnosFiltrados = fechaSeleccionada
         </div>
 
         {/* Lista de turnos filtrados por fecha */}
-        <div className="mt-8 w-full lg:max-w-7xl px-4 sm:px-6">
+        <div className="mt-8 w-full lg:max-w-7xl sm:px-6">
   {turnosFiltrados && turnosFiltrados.length > 0 ? (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-1 lg:gap-2">
       {/* Esto se mapea sobre turnosFiltrados, que ya está ordenado */}
