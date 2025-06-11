@@ -79,7 +79,7 @@ export const SeccionPanelCancha = ({ seccion, titulo, cancha }) => {
         to={seccion}
         state={{ cancha }}
         className={`
-          group flex flex-col items-center justify-center w-full min-h-[120px] xl:min-h-[180px]
+          group flex flex-col items-center justify-center w-full min-h-[100px] xl:min-h-[180px]
           p-4 sm:p-6 rounded-2xl bg-white border ${colorClass}
           ${bgColorClass} transition-all duration-300
           shadow-md ${shadowColorClass}

@@ -256,7 +256,7 @@ export default function VerTurnos() {
   return (
     <div className="z-10 min-h-screen w-full flex flex-col items-center text-gray-800 font-sans p-4 sm:p-6 xl:p-8">
       {/* Contenedor principal de la página */}
-      <div className="w-full max-w-4xl xl:max-w-6xl xl:max-w-7xl mx-auto">
+      <div className="w-full max-w-4xl xl:max-w-7xl mx-auto">
         {/* Header de la página */}
         <header className="flex flex-col sm:flex-row items-center justify-between mb-8 pb-4 border-b border-gray-200">
           <button
@@ -386,7 +386,7 @@ export default function VerTurnos() {
                                 />
                               </div>
                               <div>
-                                <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                                <p className="text-lg font-bold text-gray-900">
                                   {turno.hora} hs
                                 </p>
                                 {isReservado(turno.estado) ? (
