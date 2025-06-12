@@ -101,7 +101,7 @@ export default function ConfirmarTurno() {
       setIsLoading(true);
 
       // Actualizamos los datos del turno
-      await axios.put(`${serverLocal}/api-pruebas/turnos/${idTurno}`, {
+      await axios.put(`${serverExterno}/api-pruebas/turnos/${idTurno}`, {
         nombre: formData.nombre,
         dni: formData.dni,
         telefono: formData.telefono,
