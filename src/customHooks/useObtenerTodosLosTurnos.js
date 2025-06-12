@@ -2,15 +2,18 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export const useObtenerTodosLosTurnos = () => {
-    
+
     const [turnos, setTurnos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const serverLocal = 'http://localhost:3002';
+    const serverExterno = 'https://turnogol.site';
+
     useEffect(() => {
         const obtenerTurnos = async () => {
             try {
-                const res = await axios.get(`https://turnogol.site/api-pruebas/turnos_canchas`);
+                const res = await axios.get(`${serverExterno}/api-pruebas/turnos_canchas`);
                 setTurnos(res.data);
             } catch (err) {
                 console.error("Error al obtener turnos:", err);
@@ -23,5 +26,5 @@ export const useObtenerTodosLosTurnos = () => {
         obtenerTurnos();
     }, []);
 
-  return { turnos, isLoading,error };
+    return { turnos, isLoading, error };
 }

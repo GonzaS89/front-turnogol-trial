@@ -266,14 +266,14 @@ export default function VerTurnos() {
             <FaArrowLeft className="text-xl" />
             <span className="font-medium">Volver al Panel</span>
           </button>
-          <h1 className="text-3xl sm:text-4xl xl:text-5xl font-extrabold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent text-center flex-grow">
+          <h1 className="text-3xl xl:text-5xl font-extrabold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent text-center flex-grow">
             Gestión de Turnos
           </h1>
           <div className="w-auto sm:w-24"></div> {/* Spacer for alignment */}
         </header>
 
         {/* Información de la cancha (Administrá tus turnos) */}
-        <div className="bg-emerald-50 rounded-xl shadow-md p-5 mb-8 text-center border border-emerald-100">
+        <div className="p-5 mb-8 text-center">
           <p className="text-base sm:text-xl xl:text-xl font-semibold text-gray-700">
             Administrá los turnos de tu cancha aquí.
           </p>
@@ -300,7 +300,7 @@ export default function VerTurnos() {
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-3">
             {Object.entries(turnosAgrupados).map(([fecha, turnosPorFecha]) => {
               const { dayOfWeek, formattedDate } = getFormattedDateParts(fecha);
               return (
@@ -335,7 +335,7 @@ export default function VerTurnos() {
                       )}
                     </h3>
                     <button
-                      className="text-2xl sm:text-3xl text-emerald-700 hover:text-emerald-900 px-1 py-1 rounded-xl hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="text-2xl text-emerald-700 hover:text-emerald-900 px-1 py-1 rounded-xl hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       aria-label={
                         fechaVisible[fecha]
                           ? "Ocultar turnos"
@@ -371,7 +371,7 @@ export default function VerTurnos() {
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             {/* Información del turno */}
                             <div className="flex items-start sm:items-center gap-4">
-                              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-xl">
+                              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-xl bg-white border border-gray-200 shadow-xl">
                                 <FaClock
                                   className={`${
                                     turno.condicion
@@ -382,11 +382,11 @@ export default function VerTurnos() {
                                       ? "text-amber-500"
                                       : "text-gray-400"
                                   }
-                                    text-3xl sm:text-4xl`}
+                                    text-3xl md:text-2xl`}
                                 />
                               </div>
                               <div>
-                                <p className="text-lg font-bold text-gray-900">
+                                <p className="text-lg md:text-base font-bold text-gray-900">
                                   {turno.hora} hs
                                 </p>
                                 {isReservado(turno.estado) ? (
@@ -429,7 +429,7 @@ export default function VerTurnos() {
                                     </div>
                                   </div>
                                 ) : (
-                                  <p className="text-emerald-600 font-semibold text-base sm:text-xl mt-2">
+                                  <p className="text-emerald-600 font-semibold text-base mt-2">
                                     Disponible
                                   </p>
                                 )}

@@ -120,7 +120,7 @@ export default function PantallaInicial() {
       </main>
 
       {/* Footer fijo en la parte inferior */}
-      <footer className="relative z-10 w-full py-5 sm:py-6 bg-black/30 backdrop-blur-sm border-t border-gray-700/50">
+      <footer className="relative z-10 w-full py-5 sm:py-6">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <p className="text-sm sm:text-base text-gray-400 mb-3">
             ¿Tenés una cancha y querés sumarla?

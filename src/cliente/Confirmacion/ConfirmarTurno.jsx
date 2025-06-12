@@ -30,6 +30,9 @@ export default function ConfirmarTurno() {
   const [errorTelefono, setErrorTelefono] = useState("");
   const navigate = useNavigate();
 
+  const serverLocal = 'http://localhost:3002';
+  const serverExterno = 'https://turnogol.site';
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -98,7 +101,7 @@ export default function ConfirmarTurno() {
       setIsLoading(true);
 
       // Actualizamos los datos del turno
-      await axios.put(`https://turnogol.site/api-pruebas/turnos/${idTurno}`, {
+      await axios.put(`${serverLocal}/api-pruebas/turnos/${idTurno}`, {
         nombre: formData.nombre,
         dni: formData.dni,
         telefono: formData.telefono,

@@ -89,14 +89,14 @@ export const SeccionPanelCancha = ({ seccion, titulo, cancha }) => {
         `}
       >
         <div className="flex items-center justify-between w-full h-full relative z-10">
-          <div className="flex items-center gap-4 sm:gap-5">
+          <div className="flex items-center gap-1 sm:gap-5">
             <div
               className={`p-3 lg:p-5 rounded-xl ${iconBgColorClass} transition-colors duration-200 shadow-sm`}
             >
               {obtenerIcono(titulo)}
             </div>
             <span
-              className={`text-lg sm:text-xl xl:text-3xl font-bold text-gray-800 ${titleColorClass} transition-colors duration-200`}
+              className={`xl:text-3xl font-bold text-gray-800 ${titleColorClass} transition-colors duration-200`}
             >
               {titulo}
             </span>

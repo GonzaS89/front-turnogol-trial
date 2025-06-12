@@ -11,18 +11,9 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    // Contenedor principal del footer.
-    // - `relative z-10`: Asegura que el footer esté por encima de otros elementos de fondo.
-    // - `w-full`: Ocupa todo el ancho disponible.
-    // - `py-8 sm:py-10`: Padding vertical responsivo.
-    // - `bg-gray-950`: Fondo gris muy oscuro para contraste.
-    // - `text-gray-300`: Color de texto base claro para el footer general.
-    // - `text-sm sm:text-base`: Tamaño de fuente responsivo.
-    <footer className="relative z-10 w-full bg-gray-950 py-8 sm:py-10 text-gray-300 text-sm sm:text-base">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center">
-        {/* Este será el único div que contiene todo el contenido */}
-        {/* Se mantiene `pt-6 border-t border-gray-800 w-full` para la línea divisoria y ancho completo */}
-    
+
+    <footer className="relative z-10 w-full bg-gray-950 py-4 text-gray-300 text-sm sm:text-base">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center">    
           <p className="mb-2 text-gray-500">
             © {currentYear} TurnoGol. Todos los derechos reservados.
           </p>
@@ -30,7 +21,6 @@ function Footer() {
             Desarrollada por <span className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">Sinhg Gonzalo</span>.
           </p>
           
-          {/* Botón de Contacto por WhatsApp - Ahora debajo de la atribución */}
           <a
             href="https://wa.me/5493814482619"
             target="_blank"

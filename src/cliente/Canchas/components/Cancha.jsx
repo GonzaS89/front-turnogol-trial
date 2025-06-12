@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaArrowRight, FaMapMarkerAlt } from "react-icons/fa";
 
-export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad, turnosDisponibles }) => {
+export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad }) => {
 
   return (
     <div
