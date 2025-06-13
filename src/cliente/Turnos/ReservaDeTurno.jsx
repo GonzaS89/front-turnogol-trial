@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useCanchas } from "../../customHooks/useCanchas";
+import { usePropietarios } from "../../customHooks/usePropietarios";
 import { useObtenerTurnosxCancha } from "../../customHooks/useObtenerTurnosxCancha";
 import { FaFutbol, FaArrowLeft } from "react-icons/fa";
 import { Turno } from "./components/Turno";
@@ -10,7 +10,7 @@ export default function ReservaDeTurno() {
   const location = useLocation();
   const { seccioncancha: seccion } = useParams();
   const { idCancha: canchaId } = location.state || {};
-  const { datos: canchas, isLoading: loadingCancha } = useCanchas();
+  const { datos: canchas, isLoading: loadingCancha } = usePropietarios();
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const navigate = useNavigate();
 
@@ -151,7 +151,7 @@ const turnosFiltrados = fechaSeleccionada
         </svg>
       </div>
       {/* Header con imagen de portada y superposición de información */}
-      <div className="relative h-44 sm:h-56 md:h-64 xl:h-72 xl:h-80 w-full overflow-hidden">
+      <div className="relative h-44 sm:h-56 md:h-64 lg:h-48 xl:h-80 w-full overflow-hidden">
         {/* Imagen de portada */}
         {cancha?.portada ? (
           <img

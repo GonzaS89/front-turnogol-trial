@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useCanchas } from "../../customHooks/useCanchas";
+import { usePropietarios } from "../../customHooks/usePropietarios";
 import { useObtenerTurnosxCancha } from "../../customHooks/useObtenerTurnosxCancha";
 import { FaUser, FaIdCard, FaMoneyBillWave, FaPhone} from "react-icons/fa";
 import { FaMoneyBill1Wave } from "react-icons/fa6";
@@ -13,7 +13,7 @@ export default function ConfirmarTurno() {
   const location = useLocation();
   const { idCancha } = location.state || {};
   const { idTurno } = location.state || {};
-  const { datos: canchas } = useCanchas();
+  const { datos: canchas } = usePropietarios();
   const { turnos } = useObtenerTurnosxCancha(idCancha);
   const cancha = canchas.find((c) => c.id === idCancha);
   const turno = turnos?.find((t) => t.id === idTurno);

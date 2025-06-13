@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useCanchas } from "../../customHooks/useCanchas";
+import { usePropietarios } from "../../customHooks/usePropietarios";
 import { useObtenerTodosLosTurnos } from "../../customHooks/useObtenerTodosLosTurnos";
 import { Cancha } from "./components/Cancha";
 import { format } from "date-fns";
@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import logo from "/logo.png"; // Puedes dejarlo aquí o quitarlo si no se usa directamente en este componente.
 
 export default function Canchas() {
-  const { datos: canchas, isLoading, error } = useCanchas();
+  const { datos: canchas, isLoading, error } = usePropietarios();
   const [searchTerm, setSearchTerm] = useState("");
   // No necesitamos showResults si siempre queremos mostrar las canchas
   // const [showResults, setShowResults] = useState(false);

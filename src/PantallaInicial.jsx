@@ -82,18 +82,18 @@ export default function PantallaInicial() {
             animate="visible"
             className="flex-1 text-center lg:text-left p-4 sm:p-6 lg:p-0"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-4 sm:mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold leading-tight tracking-tight mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-emerald-300 to-teal-300 bg-clip-text text-transparent drop-shadow-lg">
                 ¡Reservá tu cancha!
               </span>
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-200 max-w-xl lg:max-w-none mx-auto lg:mx-0 leading-relaxed mb-8 sm:mb-10 drop-shadow-md">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-xl lg:max-w-none mx-auto lg:mx-0 leading-relaxed mb-8 sm:mb-10 drop-shadow-md">
               Encontrá, reservá y jugá. Así de fácil con TurnoGol.
             </p>
             <motion.div variants={buttonVariants}>
               <Link
                 to="/canchas"
-                className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-extrabold py-4 px-8 sm:py-5 sm:px-10 md:py-6 md:px-12 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:scale-95 text-lg sm:text-xl md:text-2xl whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-extrabold py-4 px-8 sm:py-5 sm:px-10 md:py-6 md:px-12 lg:py-4 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:scale-95 text-lg sm:text-xl md:text-2xl whitespace-nowrap"
               >
                 <FaFutbol className="text-xl sm:text-2xl" />
                 <span>Reservar ahora</span>
@@ -113,7 +113,7 @@ export default function PantallaInicial() {
             <img
               src={logo}
               alt="TurnoGol Logo"
-              className="w-48 sm:w-56 md:w-64 lg:w-[600px] mx-auto drop-shadow-2xl" // Ajustado el tamaño base a w-48 y escalado en sm, md, lg
+              className="w-48 sm:w-56 md:w-64 mx-auto drop-shadow-2xl" // Ajustado el tamaño base a w-48 y escalado en sm, md, lg
             />
           </motion.div>
         </div>

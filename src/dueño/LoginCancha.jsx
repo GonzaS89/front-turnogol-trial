@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCanchas } from "../customHooks/useCanchas";
+import { usePropietarios } from "../customHooks/usePropietarios";
 import Cookies from "js-cookie";
 import { Eye, EyeOff, UserCircle2, LockKeyhole } from "lucide-react"; // Importamos iconos de Lucide actualizados
 
@@ -11,7 +11,7 @@ export default function LoginCancha() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { datos: canchas } = useCanchas();
+  const { datos: canchas } = usePropietarios();
 
   // Redirigir si ya hay sesión activa y datos válidos
   useEffect(() => {
