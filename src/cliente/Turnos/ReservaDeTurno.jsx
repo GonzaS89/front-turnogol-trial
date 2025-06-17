@@ -1,6 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { usePropietarios } from "../../customHooks/usePropietarios";
 import { useObtenerTurnosxCancha } from "../../customHooks/useObtenerTurnosxCancha";
+import { useObtenerCanchas } from '../../customHooks/useObtenerCanchas';
 import { FaFutbol, FaArrowLeft } from "react-icons/fa";
 import { Turno } from "./components/Turno";
 import { useMemo, useState, useEffect } from "react";
@@ -9,34 +10,33 @@ import { motion } from "framer-motion";
 export default function ReservaDeTurno() {
   const location = useLocation();
   const { seccioncancha: seccion } = useParams();
-  const { idCancha: canchaId } = location.state || {};
-  const { datos: canchas, isLoading: loadingCancha } = usePropietarios();
+  const { idPropietario: propietarioId } = location.state || {};
+  const { datos: propietarios, isLoading: loadingPropietario } = usePropietarios();
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
+  // Nuevo estado para la cancha seleccionada
+  const [canchaSeleccionada, setCanchaSeleccionada] = useState(null);
   const navigate = useNavigate();
 
-  const cancha = useMemo(() => {
-    return canchas?.find(
-      (item) => item.seccion === seccion || item.id === canchaId
+  const propietario = useMemo(() => {
+    return propietarios?.find(
+      (item) => item.seccion === seccion || item.id === propietarioId
     );
-  }, [canchas, seccion, canchaId]);
+  }, [propietarios, seccion, propietarioId]);
 
-  const { turnos, isLoading, error } = useObtenerTurnosxCancha(cancha?.id);
+  const { turnos, isLoading, error } = useObtenerTurnosxCancha(canchaSeleccionada);
+
+  // 'canchas' ya viene filtrado por propietario.id gracias a la modificación en useObtenerCanchas
+  const { datos: canchas, isLoading: isLoadingCanchas, error: errorCanchas } = useObtenerCanchas(propietario?.id);
 
   // --- Funciones de Utilidad de Fecha (Nativas) ---
 
-  // Obtiene la fecha actual en la zona horaria UTC-3 (Argentina) al inicio del día
   const getTodayInArgentina = () => {
     const now = new Date();
-    // Calcular el offset para UTC-3 (3 horas * 60 minutos * 60 segundos * 1000 milisegundos)
     const argentinaOffsetMs = -3 * 60 * 60 * 1000;
-    // La diferencia entre UTC y la hora local del navegador
     const localOffsetMs = now.getTimezoneOffset() * 60 * 1000;
-    // Ajustar la hora actual para que sea UTC y luego restarle el offset de Argentina
     const argentinaTime = new Date(
       now.getTime() + localOffsetMs + argentinaOffsetMs
     );
-
-    // Obtener la fecha en formato YYYY-MM-DD (al inicio del día)
     return new Date(
       argentinaTime.getFullYear(),
       argentinaTime.getMonth(),
@@ -44,7 +44,6 @@ export default function ReservaDeTurno() {
     );
   };
 
-  // Compara solo la parte de la fecha (día, mes, año)
   const isSameDay = (date1, date2) => {
     return (
       date1.getFullYear() === date2.getFullYear() &&
@@ -53,20 +52,16 @@ export default function ReservaDeTurno() {
     );
   };
 
-  // Función para obtener el día de la semana y la fecha formateada por separado
   const getFormattedDateParts = (fechaStr) => {
-    const dateObj = new Date(fechaStr + "T00:00:00"); // Asegura que se parsea como UTC para evitar problemas de TZ
-
+    const dateObj = new Date(fechaStr + "T00:00:00");
     const dias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
     const mesesAbreviados = [
       "Ene", "Feb", "Mar", "Abr", "May", "Jun",
       "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
     ];
-
     const dayOfWeek = dias[dateObj.getDay()];
     const formattedDay = String(dateObj.getDate()).padStart(2, "0");
     const formattedMonth = mesesAbreviados[dateObj.getMonth()];
-
     return { dayOfWeek, formattedDay, formattedMonth };
   };
 
@@ -82,11 +77,10 @@ export default function ReservaDeTurno() {
     turnos.forEach((turno) => {
       if (!turno.fecha) return;
 
-      const fechaTurno = new Date(turno.fecha.split("T")[0] + "T00:00:00"); // Asegura que la fecha sea al inicio del día en UTC
+      const fechaTurno = new Date(turno.fecha.split("T")[0] + "T00:00:00");
 
-      // CAMBIO CLAVE AQUÍ: Solo incluir turnos cuya fecha sea hoy o en el futuro
-      if (fechaTurno.getTime() >= todayInArgentina.getTime()) { // Eliminamos la resta de 24 horas
-        const fechaStr = turno.fecha.split("T")[0]; // Mantener formato YYYY-MM-DD para la clave
+      if (fechaTurno.getTime() >= todayInArgentina.getTime()) {
+        const fechaStr = turno.fecha.split("T")[0];
         if (!agrupados[fechaStr]) {
           agrupados[fechaStr] = [];
         }
@@ -94,10 +88,9 @@ export default function ReservaDeTurno() {
       }
     });
 
-    // Filtramos y ordenamos las fechas
     const fechasFiltradas = Object.entries(agrupados)
       .map(([fecha, turnos]) => ({ fecha, turnos }))
-      .sort((a, b) => new Date(a.fecha) - new Date(b.fecha)); // Ordenar por fecha
+      .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
 
     return fechasFiltradas;
   }, [turnos]);
@@ -109,40 +102,62 @@ export default function ReservaDeTurno() {
     }
   }, [turnosAgrupadosPorFecha, fechaSeleccionada]);
 
-  // Función para convertir hora en formato "HH:mm" a minutos totales
-  // Función para convertir hora en formato "HH:mm" a minutos totales
-const convertirHoraAMinutos = (horaStr) => {
-  const [hora, minutos] = horaStr.split(":").map(Number);
-  // Si 00:00 debe ir al final, lo tratamos como 24*60 minutos
-  // Si no, simplemente sería hora * 60 + minutos
-  const horaNormalizada = (hora === 0 && minutos === 0) ? 24 * 60 : hora * 60 + minutos;
-  return horaNormalizada;
-};
+  // Seleccionar automáticamente la primera cancha si no hay ninguna seleccionada
+  useEffect(() => {
+    // Si ya hay una cancha seleccionada y aún existe en la lista, no hacemos nada.
+    // Esto evita que se resetee la selección si el usuario ya eligió una cancha.
+    if (canchaSeleccionada && canchas.some(c => c.id === canchaSeleccionada)) {
+      return;
+    }
 
-// Filtrar y ordenar turnos por hora según la fecha seleccionada
-const turnosFiltrados = fechaSeleccionada
-  ? [
-      ...(turnos?.filter((turno) =>
-        turno.fecha?.startsWith(fechaSeleccionada)
-      ) || []),
-    ].sort(
-      // La función de comparación ya ordena de menor a mayor
+    // Si hay canchas disponibles y no hay una seleccionada (o la seleccionada ya no existe)
+    if (canchas.length > 0) {
+      setCanchaSeleccionada(canchas[0].id); // Selecciona la primera cancha por defecto
+    } else {
+      setCanchaSeleccionada(null); // Si no hay canchas, deselecciona
+    }
+  }, [canchas, canchaSeleccionada]); // Depende de 'canchas' y 'canchaSeleccionada'
+
+
+  const convertirHoraAMinutos = (horaStr) => {
+    const [hora, minutos] = horaStr.split(":").map(Number);
+    const horaNormalizada = (hora === 0 && minutos === 0) ? 24 * 60 : hora * 60 + minutos;
+    return horaNormalizada;
+  };
+
+  // Filtrar y ordenar turnos por fecha Y por cancha seleccionada
+  const turnosFiltrados = useMemo(() => {
+    if (!fechaSeleccionada || !turnos) return [];
+
+    let filtered = turnos.filter(
+      (turno) => turno.fecha?.startsWith(fechaSeleccionada)
+    );
+
+    // Aplicar el filtro por cancha si hay una cancha seleccionada
+    if (canchaSeleccionada) {
+      filtered = filtered.filter(
+        (turno) => turno.cancha_id === canchaSeleccionada // Asegúrate de que 'cancha_id' es la propiedad correcta en tus turnos
+      );
+    }
+
+    return filtered.sort(
       (a, b) => convertirHoraAMinutos(a.hora) - convertirHoraAMinutos(b.hora)
-    )
-  : [];
+    );
+  }, [fechaSeleccionada, canchaSeleccionada, turnos]);
+
 
   return (
     <div className="w-full min-h-screen flex flex-col font-sans">
       <div className="absolute inset-0 z-0 opacity-10">
         <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none">
-          <circle cx="25" cy="25" r="10" fill="url(#gradientCircle)" opacity="0.6"/>
-          <circle cx="75" cy="75" r="15" fill="url(#gradientCircle)" opacity="0.6"/>
-          <path d="M0 50 L20 70 L50 40 L80 60 L100 40 V0 H0 Z" fill="url(#gradientPath)" opacity="0.3"/>
+          <circle cx="25" cy="25" r="10" fill="url(#gradientCircle)" opacity="0.6" />
+          <circle cx="75" cy="75" r="15" fill="url(#gradientCircle)" opacity="0.6" />
+          <path d="M0 50 L20 70 L50 40 L80 60 L100 40 V0 H0 Z" fill="url(#gradientPath)" opacity="0.3" />
           <defs>
-            <radiaxlradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <radialGradient id="gradientCircle" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
               <stop offset="0%" stopColor="#34D399" /> {/* green-400 */}
               <stop offset="100%" stopColor="#059669" /> {/* emerald-600 */}
-            </radiaxlradient>
+            </radialGradient>
             <linearGradient id="gradientPath" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10B981" /> {/* emerald-500 */}
               <stop offset="100%" stopColor="#065F46" /> {/* green-900 */}
@@ -153,10 +168,10 @@ const turnosFiltrados = fechaSeleccionada
       {/* Header con imagen de portada y superposición de información */}
       <div className="relative h-44 sm:h-56 md:h-64 lg:h-48 xl:h-80 w-full overflow-hidden">
         {/* Imagen de portada */}
-        {cancha?.portada ? (
+        {propietario?.portada ? (
           <img
-            src={cancha.portada}
-            alt={`Portada de ${cancha.nombre}`}
+            src={propietario.portada}
+            alt={`Portada de ${propietario.nombre}`}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -167,28 +182,37 @@ const turnosFiltrados = fechaSeleccionada
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent backdrop-brightness-50 backdrop-blur-"></div>
 
         {/* Loader mientras carga */}
-        {loadingCancha && (
+        {loadingPropietario && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-20">
             <div className="w-16 h-16 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
           </div>
         )}
 
         {/* Información de la cancha superpuesta */}
-        {!loadingCancha && (
+        {!loadingPropietario && (
           <div className="absolute inset-0 flex items-center justify-start px-4 sm:px-6 xl:px-8 pb-4 sm:pb-0 z-10">
             {" "}
             {/* Botón de volver al panel - similar a VerTurnos */}
             {/* Contenido de la información de la cancha (logo + detalles) */}
             <div className="flex items-center gap-3 sm:gap-4 xl:gap-6 w-full xl:w-[1200px] xl:mx-auto">
+              {/* Botón para volver */}
+              <button
+                onClick={() => navigate(-1)}
+                className="absolute top-4 left-4 flex items-center gap-2 text-white bg-black/40 hover:bg-black/60 rounded-full px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base transition-all duration-300 backdrop-blur-sm shadow-md"
+              >
+                <FaArrowLeft className="text-white text-lg" />
+                <span className="hidden sm:inline">Volver</span>
+              </button>
+
               {/* Logo circular */}
               <div
-                className="w-16 h-16 sm:w-20 sm:h-20 xl:w-28 xl:h-28 xl:w-32 xl:h-32 rounded-full border-3 border-white shadow-xl overflow-hidden flex-shrink-0
+                className="w-16 h-16 sm:w-20 sm:h-20 xl:w-32 rounded-full border-3 border-white shadow-xl overflow-hidden flex-shrink-0
               transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
               >
-                {cancha?.logo ? (
+                {propietario?.logo ? (
                   <img
-                    src={cancha.logo}
-                    alt={`Logo de ${cancha.nombre}`}
+                    src={propietario.logo}
+                    alt={`Logo de ${propietario.nombre}`}
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -204,21 +228,21 @@ const turnosFiltrados = fechaSeleccionada
               max-w-sm sm:max-w-md xl:max-w-xl shadow-2xl
               transform transition-all duration-300 hover:scale-[1.01]"
               >
-                <h2 className="text-2xl sm:text-3xl xl:text-4xl xl:text-5xl font-extrabold capitalize tracking-wide leading-tight text-shadow-xl">
-                  {cancha?.nombre || "Cancha"}
+                <h2 className="text-2xl sm:text-3xl xl:text-5xl font-extrabold capitalize tracking-wide leading-tight text-shadow-xl">
+                  {propietario?.nombre || "Cancha"}
                 </h2>
                 <p className="text-sm sm:text-base xl:text-xl text-white/90 mt-1 flex items-center gap-2">
                   <span className="text-emerald-300 text-xl">📍</span>
-                  {cancha?.direccion ? `${cancha.direccion} - ` : ""}
+                  {propietario?.direccion ? `${propietario.direccion} - ` : ""}
                   <span className="font-semibold">
-                    {cancha?.localidad || "Localidad no disponible"}
+                    {propietario?.localidad || "Localidad no disponible"}
                   </span>
                 </p>
                 <p className="text-xs sm:text-sm xl:text-base text-emerald-200 mt-1 flex items-center gap-2">
                   <span className="text-emerald-300 text-base">💰</span>
                   <span className="font-semibold">
-                    Precios por turno: ${Math.trunc(cancha?.tarifa1 || 0)} - $
-                    {Math.trunc(cancha?.tarifa2 || 0)}
+                    Precios por turno: ${Math.trunc(propietario?.tarifa1 || 0)} - $
+                    {Math.trunc(propietario?.tarifa2 || 0)}
                   </span>
                 </p>
               </div>
@@ -238,7 +262,44 @@ const turnosFiltrados = fechaSeleccionada
               Hubo un error al cargar los turnos.
             </p>
           )}
+          {errorCanchas && (
+            <p className="text-red-500 mt-4 text-center">
+              Hubo un error al cargar las canchas.
+            </p>
+          )}
         </header>
+
+        {/* Sección de botones de canchas */}
+        <div className="w-full max-w-4xl xl:max-w-auto mx-auto mb-8 flex flex-wrap justify-center gap-3 sm:gap-4">
+          {isLoadingCanchas ? (
+            <div className="flex justify-center items-center w-full min-h-[50px]">
+              <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="ml-3 text-gray-600">Cargando canchas...</p>
+            </div>
+          ) : canchas.length === 0 ? (
+            <p className="text-gray-500 text-center w-full py-4">
+              No hay canchas disponibles para este propietario.
+            </p>
+          ) : (
+            canchas.map((cancha, index) => (
+              <button
+                key={cancha.id}
+                onClick={() => setCanchaSeleccionada(cancha.id_cancha)}
+                className={`
+                  px-5 py-2 sm:px-6 sm:py-2.5 rounded-full text-sm sm:text-base font-semibold
+                  transition-all duration-300 ease-in-out transform active:scale-95
+                  ${canchaSeleccionada === cancha.id
+                    ? "bg-emerald-600 text-white shadow-lg shadow-emerald-400/40 border border-emerald-700"
+                    : "bg-white text-gray-700 border border-gray-300 hover:bg-emerald-50 hover:border-emerald-400 hover:text-emerald-700 shadow-md"
+                  }
+                `}
+              >
+                cancha #{index+1}
+              </button>
+            ))
+          )}
+        </div>
+        {/* Fin de sección de botones de canchas */}
 
         {/* Carrusel de fechas */}
         <div className="w-full max-w-4xl xl:max-w-auto mx-auto mb-8 relative px-8">
@@ -270,7 +331,7 @@ const turnosFiltrados = fechaSeleccionada
             ) : (
               turnosAgrupadosPorFecha.map(({ fecha }, index) => {
                 const todayInArgentina = getTodayInArgentina();
-                const currentCardDate = new Date(fecha + "T00:00:00"); // Fecha de la tarjeta
+                const currentCardDate = new Date(fecha + "T00:00:00");
                 const isToday = isSameDay(currentCardDate, todayInArgentina);
 
                 const { dayOfWeek, formattedDay, formattedMonth } =
@@ -281,7 +342,6 @@ const turnosFiltrados = fechaSeleccionada
                     key={fecha}
                     onClick={() => {
                       setFechaSeleccionada(fecha);
-                      // Opcional: Desplazar la fecha seleccionada al centro si está fuera de vista
                       const targetElement = document.getElementById(
                         `date-card-${fecha}`
                       );
@@ -304,48 +364,43 @@ const turnosFiltrados = fechaSeleccionada
                         });
                       }
                     }}
-                    id={`date-card-${fecha}`} // Añadir un ID para facilitar el scrollIntoView
+                    id={`date-card-${fecha}`}
                     className={`
-                      min-w-[100px] sm:min-w-[120px] xl:min-w-[140px] 
-                      px-4 py-3 sm:px-5 sm:py-4 rounded-xl cursor-pointer 
+                      min-w-[100px] sm:min-w-[120px] xl:min-w-[140px]
+                      px-4 py-3 sm:px-5 sm:py-4 rounded-xl cursor-pointer
                       transition-all duration-300 transform active:scale-95
                       text-center flex flex-col justify-center items-center
-                      ${
-                        fechaSeleccionada === fecha
-                          ? "bg-gradient-to-br from-emerald-600 to-green-700 text-white shadow-xl shadow-emerald-400/50 scale-105 ring-2 ring-emerald-300"
-                          : "bg-white border border-gray-200 text-gray-800 hover:bg-emerald-50 hover:shadow-md"
+                      ${fechaSeleccionada === fecha
+                        ? "bg-gradient-to-br from-emerald-600 to-green-700 text-white shadow-xl shadow-emerald-400/50 scale-105 ring-2 ring-emerald-300"
+                        : "bg-white border border-gray-200 text-gray-800 hover:bg-emerald-50 hover:shadow-md"
                       }
-                      ${
-                        isToday && fechaSeleccionada !== fecha
-                          ? "ring-2 ring-emerald-500 ring-offset-2 ring-offset-white"
-                          : ""
+                      ${isToday && fechaSeleccionada !== fecha
+                        ? "ring-2 ring-emerald-500 ring-offset-2 ring-offset-white"
+                        : ""
                       }
                     `}
                   >
                     <p
-                      className={`text-sm font-semibold uppercase tracking-wide ${
-                        fechaSeleccionada === fecha
+                      className={`text-sm font-semibold uppercase tracking-wide ${fechaSeleccionada === fecha
                           ? "text-white"
                           : "text-emerald-600"
-                      }`}
+                        }`}
                     >
                       {isToday ? "Hoy" : dayOfWeek}
                     </p>
                     <p
-                      className={`font-extrabold text-3xl sm:text-4xl ${
-                        fechaSeleccionada === fecha
+                      className={`font-extrabold text-3xl sm:text-4xl ${fechaSeleccionada === fecha
                           ? "text-white"
                           : "text-gray-900"
-                      }`}
+                        }`}
                     >
                       {formattedDay}
                     </p>
                     <p
-                      className={`text-sm mt-1 ${
-                        fechaSeleccionada === fecha
+                      className={`text-sm mt-1 ${fechaSeleccionada === fecha
                           ? "text-white/90"
                           : "text-emerald-500"
-                      }`}
+                        }`}
                     >
                       {formattedMonth}.
                     </p>
@@ -368,29 +423,28 @@ const turnosFiltrados = fechaSeleccionada
           </button>
         </div>
 
-        {/* Lista de turnos filtrados por fecha */}
+        {/* Lista de turnos filtrados por fecha Y CANCHA */}
         <div className="mt-8 w-full xl:max-w-7xl sm:px-6">
-  {turnosFiltrados && turnosFiltrados.length > 0 ? (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-1 xl:gap-2">
-      {/* Esto se mapea sobre turnosFiltrados, que ya está ordenado */}
-      {turnosFiltrados.map((turno, i) => (
-        <Turno
-          key={i}
-          id={turno.id}
-          estado={turno.estado}
-          cancha={turno.cancha_id}
-          hora={turno.hora}
-          precio={turno.precio}
-          fecha={turno.fecha}
-        />
-      ))}
-    </div>
-  ) : (
-    <p className="text-gray-500 text-center py-8">
-      No hay turnos disponibles para esta fecha.
-    </p>
-  )}
-</div>
+          {turnosFiltrados && turnosFiltrados.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-4 xl:gap-6"> {/* Ajustado el gap para mejor estética */}
+              {turnosFiltrados.map((turno, i) => (
+                <Turno
+                  key={turno.id} // Es mejor usar un ID único del turno si existe
+                  id={turno.id}
+                  estado={turno.estado}
+                  cancha={turno.cancha_id} // Asegúrate que 'cancha_id' sea el ID numérico de la cancha
+                  hora={turno.hora}
+                  precio={turno.precio}
+                  fecha={turno.fecha}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-center py-8">
+              No hay turnos disponibles para esta fecha y cancha.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

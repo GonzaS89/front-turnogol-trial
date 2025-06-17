@@ -15,7 +15,7 @@ export const Cancha = ({ id, nombre, seccion, logo, direccion, index, localidad 
       {/* Link covering the entire card for navigation */}
       <Link
         to={`/${seccion}`}
-        state={{ idCancha: id }}
+        state={{ idPropietario: id }}
         className={`
           flex items-center gap-4 sm:gap-6 p-4 sm:p-5 pr-5 group
           border-l-4 border-transparent hover:border-emerald-400 transition-all duration-300
