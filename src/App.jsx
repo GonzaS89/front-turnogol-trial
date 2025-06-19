@@ -3,7 +3,7 @@ import './App.css'; // Assuming you have a global CSS file for App
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 // Import your page components
-import PantallaInicial from './PantallaInicial';
+import PantallaInicial from './PantallaInicial'; // Esta es la página principal que el usuario quiere que muestre el footer
 import Canchas from './cliente/Canchas/Canchas';
 import ReservaDeTurno from './cliente/Turnos/ReservaDeTurno';
 import ConfirmarTurno from './cliente/Confirmacion/ConfirmarTurno';
@@ -16,19 +16,21 @@ import Footer from './Footer'; // Import your Footer component
 
 /**
  * Layout component to conditionally display the Footer.
- * It checks the current route and renders the Footer only if the path is not '/'.
+ * It now renders the Footer on ALL routes, including the home page ('/').
  * @param {object} props - Component props.
  * @param {React.ReactNode} props.children - Child components (Routes in this case).
  */
 const Layout = ({ children }) => {
-  const location = useLocation();
-  // Determine if the footer should be shown (true for all paths EXCEPT '/')
-  const showFooter = location.pathname !== '/';
-
+  // El hook useLocation es necesario si se quisieran condiciones más complejas,
+  // pero para mostrar el footer en todas las rutas (incluida la inicial),
+  // simplemente renderizamos el Footer incondicionalmente.
+  // Si en el futuro quieres ocultarlo en rutas específicas, aquí es donde iría la lógica.
+  // Por ejemplo: const showFooter = !['/login', '/otra-ruta-sin-footer'].includes(location.pathname);
+  
   return (
     <>
       {children}
-      {showFooter && <Footer />} {/* Render Footer conditionally */}
+      <Footer /> {/* Render Footer siempre */}
     </>
   );
 };
@@ -43,9 +45,10 @@ export default function App() {
   return (
     <BrowserRouter>
       {/* Main container with global background and SVG elements */}
+      {/* Si el fondo es una imagen, asegúrate de que esté bien posicionada y no oculte el contenido */}
       <div className="bg-gradient-to-br from-green-50 via-emerald-100 to-emerald-200 min-h-screen flex flex-col items-center justify-around relative">
 
-        {/* Background SVG elements for visual flair */}
+        {/* Background SVG elements for visual flair (se mantienen como estaban) */}
         <svg className="w-full h-full absolute inset-0 z-0" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
           <circle cx="25" cy="25" r="20" className="fill-current text-green-700 opacity-80"></circle>
           <rect x="10" y="55" width="80" height="35" rx="8" ry="8" className="fill-current text-white shadow-md"></rect>
@@ -55,7 +58,7 @@ export default function App() {
         </svg>
 
         {/* Content area that will hold routes and conditionally the footer */}
-        {/* The 'Layout' component wraps the 'Routes' to manage footer visibility */}
+        {/* El 'Layout' component ahora siempre renderiza el Footer */}
         <Layout>
           <Routes>
             {/* Initial screen route */}

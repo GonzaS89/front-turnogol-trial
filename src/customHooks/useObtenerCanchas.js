@@ -15,7 +15,7 @@ export const useObtenerCanchas = (id) => {
       setError(null); // Reiniciar error en cada nueva carga
 
       try {
-        const res = await axios.get(`${serverLocal}/api-pruebas/canchas`);
+        const res = await axios.get(`${serverExterno}/api-pruebas/canchas`);
         const filteredData = res.data.filter(prop => prop.id_propietario === id);
         setDatos(filteredData);
       } catch (err) {
